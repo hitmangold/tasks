@@ -67,4 +67,3 @@ $mycar3 = new Toyota('Gray', '280km','Automatic','2012','Camry');
 echo $mycar->fullinfo() . '<br>';
 echo $mycar2->partinfo() . '<br>';
 echo $mycar3->fullinfo() . '<br>';
-?>

@@ -109,4 +109,3 @@ echo '</form>';
 if(isset($_GET['submit'])) {
     echo '<p class="generate_txt" style="font-size: 17px; font-weight: 500; font-weight: bold;"><?=$result?></p>';
 }
-?>

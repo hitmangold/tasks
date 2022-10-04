@@ -12,5 +12,5 @@ Expected Output : 'com'
 $str = 'rayy@example.com';
 $word = explode('@', $str);
 echo $word[0] . '<br>';
-$word = substr($str, -3);
+$word = substr($str,-3);
 echo $word . '<br>';

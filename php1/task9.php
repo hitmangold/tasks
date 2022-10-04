@@ -23,8 +23,6 @@ echo 'Average Temperature is : ' . $average;
 $firstFiveElements = array_slice($temperatures, count($temperatures)-5, 5);
 sort($firstFiveElements);
 $lastFiveElements = array_slice($temperatures, 0, 5);
-$fivelowest = '';
-$fivehighest = '';
 $fivelowest = implode(" ",$firstFiveElements);
 $fivehighest = implode(" ",$lastFiveElements);
 echo '<br>';

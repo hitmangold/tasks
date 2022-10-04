@@ -54,4 +54,3 @@ for($i=0;$i<count($arr); $i++){
     $new_count++;
 }
 echo '</table>';
-?>
