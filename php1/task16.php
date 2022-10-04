@@ -1,4 +1,8 @@
 <?php
+/* Write a PHP script to replace the first 'the' of the following string with 'That'.
+Sample date : 'the quick brown fox jumps over the lazy dog.'
+Expected Result : That quick brown fox jumps over the lazy dog.
+ */
 $str = 'the quick brown fox jumps over the lazy dog';
 $new_str = explode(" ", $str);
 function replace($str)

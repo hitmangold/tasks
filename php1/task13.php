@@ -1,4 +1,11 @@
 <?php
+/* Task13
+Write a PHP script to :
+a) transform a string all uppercase letters.
+b) transform a string all lowercase letters.
+c) make a string's first character uppercase.
+d) make a string's first character of all the words uppercase.
+ */
 $sample_str = 'The quick brown fox jumps over the lazy dog.';
 echo 'a: ' . strtoupper($sample_str) . '<br>';
 echo 'b: ' . strtolower($sample_str) . '<br>';
