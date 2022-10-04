@@ -9,5 +9,7 @@ and the words 'red', 'green' and 'white' will come from $color.
 $color = ['white', 'green', 'red', 'blue', 'black'];
 
 echo "The memory of that scene for me is like a frame of film forever frozen at that moment: the ".$color[2]." carpet, the ".$color[1]." lawn, the ".$color[0]." house, the leaden sky. The new president and his first lady. - Richard M. Nixon";
+// @todo popoxakanner@ karas miangamic stringi mej tpes el concat chanes
+// " moment: the {$color[2]} carpet, the"
 
-?>
+//@todo verjin pagox php tag@ chenq dnum yete fayl@ menak phpa grac?>

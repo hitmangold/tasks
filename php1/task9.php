@@ -8,7 +8,7 @@ List of five lowest temperatures : 60, 62, 63, 63, 64,
 List of five highest temperatures : 76, 78, 79, 81, 85,
  */
 $temperatures = [78, 60, 62, 68, 71, 68, 73, 85, 66, 64, 76, 63, 75, 76, 73, 68, 62, 73, 72, 65, 74, 62, 62, 65, 64, 68, 73, 75, 79, 73];
-function bubble_Sort($my_array,$order)
+function bubble_Sort($my_array,$order) // @todo urish texic copy arac koder petq chen, karas patrasti php function ogtagorces sort anelu hamar
 {
     do
     {
@@ -53,11 +53,11 @@ $firstFiveElements = bubble_Sort($firstFiveElements,'ASC');
 $lastFiveElements = array_slice($sorted_temp, 0, 5);
 $fivelowest = '';
 $fivehighest = '';
-for($i=0; $i<count($firstFiveElements); $i++){
+for($i=0; $i<count($firstFiveElements); $i++){ //@todo implode functionic ogtvi
     $fivelowest .= $firstFiveElements[$i] . " ";
 }
 for($i=0; $i<count($lastFiveElements); $i++){
-    $fivehighest .= $lastFiveElements[$i] . " ";
+    $fivehighest .= $lastFiveElements[$i] . " "; //@todo implode functionic ogtvi
 }
 echo '<br>';
 echo 'List of five lowest temperatures : ' . $fivelowest;

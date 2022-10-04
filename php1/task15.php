@@ -12,6 +12,6 @@ Expected Output : 'com'
 $str = 'rayy@example.com';
 $word = explode('@', $str);
 echo $word[0] . '<br>';
-$word = explode('.', $str);
+$word = explode('.', $str); // @todo verjin 3 simvolna petq, petqa grvi henc verjin 3 hat@ cankacac stringi depqum
 echo $word[1] . '<br>';
 ?>

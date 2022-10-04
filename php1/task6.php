@@ -15,7 +15,10 @@ Publisher : Little Brown
 $json = '{ "Title":"The Cuckoos Calling","Author":"Robert Galbraith","Detail":{ "Publisher":"Little Brown" } }';
 $myjson = json_decode($json, true);
 
-foreach($myjson as $key => $value){
+// @todo popoxakanneri anunner@ petqa cuyc tan iranq inch en, decodic heto stacel es array bayc anun@ myjsona
+// inq@ json chi, u anunneri mej $myjson, $myarray, $mycomputer chenq grum,
+
+foreach($myjson as $key => $value){ //@todo probelner@ bolor texerum
     if(is_array($value)){
         foreach($value as $key2=>$value2){
             echo $key2 . " : " . $value2 . "<br>";
@@ -25,4 +28,4 @@ foreach($myjson as $key => $value){
         echo $key . " : " . $value . "<br>";
     }
 }
-?>
+// @todo pagox tag@?>

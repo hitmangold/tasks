@@ -12,7 +12,8 @@ loop($arr);
 $inserted = array( '$' );
 array_splice( $arr, 3, 0, $inserted );
 loop($arr);
-function loop($arg){
+function loop($arg){ // @todo cikler@ himnakanum ogtagorcum enq foreach, functioni anunnel kara lini
+    // printArray kam inchvor urish ban, loop@ shat globala
     for($i=0; $i<count($arg); $i++){
         echo $arg[$i] . " ";
     }

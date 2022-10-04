@@ -4,6 +4,8 @@ Write a PHP script which will display the colors in the following way :
 Output :
 white, green, red
  */
+
+//@todo nuyn@ inch task1-i todo-um
 $color = ['white', 'green', 'red'];
 echo '<ul><li>'.$color[1].'</li><li>'.$color[2].'</li><li>'.$color[0].'</li></ul>';
 ?>
