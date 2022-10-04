@@ -1,4 +1,9 @@
 <?php
+/* Task: Ստեղծել 2 զանգված: 1-ին զանգվածի տարրերը այբուբենի փոքրատառ և մեծատառ
+[a-z] և [A-Z] տառերն են, երկրորդ զանգվածը 0-9 թվերը: Ստեղծել form
+Գեներացնել սեղմելուց հետո ստեղծել  նշված քանակի սիմվոլներով և նշված պարամետրերով տող ,
+օգտագործելով եղած երկու զանգվածները և տպել էկրանին:
+*/
 function generate_pass($length,$type){
     $alphabet = [['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'],['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']];
     $num = [0,1,2,3,4,5,6,7,8,9];
@@ -71,14 +76,34 @@ function generate_pass($length,$type){
         return $errors['message'];
     }
 }
+$type = 0;
+$length = 0;
 if(isset($_GET['submit']) and isset($_GET['length']) and isset($_GET['type'])){
-    $result = generate_pass($_GET['length'],$_GET['type']);
+    $type = $_GET['type'];
+    $length = $_GET['length'];
+    $result = generate_pass($length,$type);
     echo $result;
 }
 echo '<form action="task2.php" method="get">';
-echo '<input placeholder="Տողի երկարությունը" name="length" type="text" width="150px">';
+if($length == 0) {
+    echo '<input placeholder="Տողի երկարությունը" name="length" type="text" width="150px">';
+}
+else{
+    echo '<input placeholder="Տողի երկարությունը" value="'.$length.'" name="length" type="text" width="150px">';
+}
 echo '<p>Տողմի մեջ ներառել</p>';
-echo '<select name="type" style="width: 170px;"><option value="1">Թվեր</option><option value="2">Տառեր</option><option value="3">Թվեր և Տառեր</option></select><br>';
+if($type == 0) {
+    echo '<select name="type" style="width: 170px;"><option value="1">Թվեր</option><option value="2">Տառեր</option><option value="3">Թվեր և Տառեր</option></select><br>';
+}
+else if($type == 1){
+    echo '<select name="type" style="width: 170px;"><option value="1" selected="1">Թվեր</option><option value="2">Տառեր</option><option value="3">Թվեր և Տառեր</option></select><br>';
+}
+else if($type == 2){
+    echo '<select name="type" style="width: 170px;"><option value="1">Թվեր</option><option value="2" selected="2">Տառեր</option><option value="3">Թվեր և Տառեր</option></select><br>';
+}
+else if($type == 3){
+    echo '<select name="type" style="width: 170px;"><option value="1">Թվեր</option><option value="2">Տառեր</option><option value="3" selected="3">Թվեր և Տառեր</option></select><br>';
+}
 echo '<input value="Գեներացնել" type="submit" name="submit" style="margin-top: 20px;">';
 echo '</form>';
 if(isset($_GET['submit'])) {
