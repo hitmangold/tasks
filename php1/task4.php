@@ -11,4 +11,3 @@ var_dump($x);
 echo '<br>';
 array_splice($x, 3, 1);
 var_dump($x);
-?>

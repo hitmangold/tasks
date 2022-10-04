@@ -13,4 +13,3 @@ for($i=0; $i<count($str1); $i++){
         break;
     }
 }
-?>

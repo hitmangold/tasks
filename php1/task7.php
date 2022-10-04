@@ -8,14 +8,13 @@ After inserting '$' the array is :
 1 2 3 $ 4 5
  */
 $arr = [1,2,3,4,5];
-loop($arr);
+prnt_arr($arr);
 $inserted = array( '$' );
 array_splice( $arr, 3, 0, $inserted );
-loop($arr);
-function loop($arg){
-    for($i=0; $i<count($arg); $i++){
-        echo $arg[$i] . " ";
+prnt_arr($arr);
+function prnt_arr($arg){
+    foreach($arg as $value){
+        echo $value . " ";
     }
     echo "<br>";
 }
-?>

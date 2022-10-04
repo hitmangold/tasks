@@ -25,4 +25,3 @@ foreach($Color as $key=>$value){
     $Color[$key] = $uppercase;
 }
 print_r($Color);
-?>

@@ -5,4 +5,3 @@ Expected Output : 2543.12
  */
 $str = '2,543.12';
 print_r(str_replace(',','',$str));
-?>

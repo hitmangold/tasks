@@ -5,8 +5,7 @@ Expected Result : That quick brown fox jumps over the lazy dog.
  */
 $str = 'the quick brown fox jumps over the lazy dog';
 $new_str = explode(" ", $str);
-function replace($str)
-{
+function replace($str){
     $result = '';
     $count = 0;
     for ($i = 0; $i < count($str); $i++) {
@@ -20,4 +19,3 @@ function replace($str)
 }
 $str = replace($new_str);
 print_r($str);
-?>
