@@ -1,79 +1,84 @@
 <?php
 require_once('assets/autoload.php');
 $page = 0;
-$errors = False;
+$errors = false;
 $ordered = 0;
-if(isset($_GET['page'])){
+if (isset($_GET['page'])) {
     $page = $_GET['page'];
 }
-if(isset($_GET['to_order']) AND isset($_SESSION['cart'])){
+if (isset($_GET['to_order']) and isset($_SESSION['cart'])) {
     $name = $_GET['user-name'];
     $surname = $_GET['user-surname'];
     $email = $_GET['user-email'];
     $total = $_GET['total'];
     $valid = new Valid();
-    $valid = $valid->user_validation($name,$surname,$email);
-    if($valid == null){
+    $valid = $valid->user_validation(
+        $name,
+        $surname,
+        $email
+    );
+    if ($valid == null) {
         $user_rows = 'first_name,last_name,email';
         $insert_user = "'{$name}','{$surname}','{$email}'";
-        $insert_query = new Requests($conn,'users',$user_rows,$insert_user);
+        $insert_query = new Requests($conn, 'users', $user_rows, $insert_user);
         $insert_query = $insert_query->insert();
-        if($insert_query){
+        if ($insert_query) {
             $user_id = $conn->lastInsertId();
             $ord_rows = 'user_id,sum';
             $insert_order = "'{$user_id}','{$total}'";
-            $insert_query = new Requests($conn,'orders',$ord_rows,$insert_order);
+            $insert_query = new Requests($conn, 'orders', $ord_rows, $insert_order);
             $insert_query = $insert_query->insert();
             $order_id = $conn->lastInsertId();
             $ord_rows_p = 'order_id,product_id,qty';
-            foreach($_SESSION['cart'] as $crt){
+            foreach ($_SESSION['cart'] as $crt) {
                 $insert_order_p = "'{$order_id}','{$crt[0]}','{$crt[1]}'";
-                $insert_query = new Requests($conn,'order_products',$ord_rows_p,$insert_order_p);
+                $insert_query = new Requests($conn, 'order_products', $ord_rows_p, $insert_order_p);
                 $insert_query = $insert_query->insert();
             }
             $ordered = 1;
             unset($_SESSION['cart']);
         }
-    }
-    else{
-        $errors = True;
+    } else {
+        $errors = true;
     }
 }
-if(isset($_GET['add_cart']) AND isset($_GET['prod_id']) AND isset($_GET['count'])){
-    if(isset($_SESSION['cart'])){
+if (isset($_GET['add_cart']) and isset($_GET['prod_id']) and isset($_GET['count'])) {
+    if (isset($_SESSION['cart'])) {
         $cart = $_SESSION['cart'];
         $repeat = 0;
-        for($i = 0; $i < count($cart); $i++){
-            if($cart[$i][0] == $_GET['prod_id']){
+        for ($i = 0; $i < count($cart); $i++) {
+            if ($cart[$i][0] == $_GET['prod_id']) {
                 $repeat = 1;
                 $cart[$i][1] += $_GET['count'];
             }
         }
-        if($repeat == 0){
-            array_push($cart,[$_GET['prod_id'],$_GET['count']]);
+        if ($repeat == 0) {
+            array_push($cart, [$_GET['prod_id'],$_GET['count']]);
         }
         $_SESSION['cart'] = $cart;
-    }
-    else{
+    } else {
         $cart_list = [];
-        array_push($cart_list,[$_GET['prod_id'],$_GET['count']]);
+        array_push($cart_list, [$_GET['prod_id'],$_GET['count']]);
         $_SESSION['cart'] = $cart_list;
     }
 }
-if(isset($_GET['add_product']) and isset($_GET['name_product']) and isset($_GET['price_product']) AND isset($_GET['description_product'])){
+if (isset($_GET['add_product']) and isset($_GET['name_product']) and isset($_GET['price_product']) and isset($_GET['description_product'])) {
     $name_product = $_GET['name_product'];
     $price_product = $_GET['price_product'];
     $description_product = $_GET['description_product'];
     $valid = new Valid();
-    $valid = $valid->product_validation($name_product,$description_product,$price_product);
-    if($valid == null){
+    $valid = $valid->product_validation(
+        $name_product,
+        $description_product,
+        $price_product
+    );
+    if ($valid == null) {
         $prd_rows = 'name,description,price';
         $insert_prd = "'{$name_product}','{$description_product}','{$price_product}'";
-        $insert_query = new Requests($conn,'products',$prd_rows,$insert_prd);
+        $insert_query = new Requests($conn, 'products', $prd_rows, $insert_prd);
         $insert_query->insert();
-    }
-    else{
-        $errors = True;
+    } else {
+        $errors = true;
         $page = 2;
     }
 }
@@ -90,7 +95,7 @@ if(isset($_GET['add_product']) and isset($_GET['name_product']) and isset($_GET[
 </head>
 <body>
 <?php
-if($ordered == 1){
+if ($ordered == 1) {
     ?>
     <div class="modal success_ordered" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -108,8 +113,6 @@ if($ordered == 1){
             </div>
         </div>
     </div>
-    <?php
-    ?>
 <script>
     $(document).on("ready",function(){
         $(".success_ordered").modal("show");
@@ -119,7 +122,7 @@ if($ordered == 1){
     $ordered = 0;
 }
 ?>
-<div class="cart" <?php if(isset($_SESSION['cart'])){ ?> style="display: block;" <?php } ?>>
+<div class="cart" <?php if (isset($_SESSION['cart'])) { ?> style="display: block;" <?php } ?>>
     <table>
         <tr>
             <th>Անվանումը</th>
@@ -128,13 +131,13 @@ if($ordered == 1){
         </tr>
             <?php
             $total_price = 0;
-            if(isset($_SESSION['cart'])){
+            if (isset($_SESSION['cart'])) {
                 $cart = $_SESSION['cart'];
-                foreach($cart as $crt){
+                foreach ($cart as $crt) {
                     $cart_id = $crt[0];
-                    $crt_query = new Requests($conn,'products','id',$cart_id);
+                    $crt_query = new Requests($conn, 'products','id',$cart_id);
                     $get_carts = $crt_query->select();
-                    foreach($get_carts as $info_carts){
+                    foreach ($get_carts as $info_carts) {
                         ?>
                         <tr>
                             <td><?=$info_carts['name']?></td>
@@ -165,7 +168,7 @@ if($ordered == 1){
         </div>
     </div>
     <?php
-    if($errors == True){
+    if ($errors == true) {
         ?>
         <p style="color: red;"><?=$valid?></p>
         <?php
@@ -182,13 +185,13 @@ if($ordered == 1){
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item <?php if($page == 0) { ?> active <?php }?>">
+                    <li class="nav-item <?php if ($page == 0) { ?> active <?php }?>">
                         <a class="nav-link" href="index.php">Գլխավոր <span class="sr-only">(current)</span></a>
                     </li>
-                    <li class="nav-item <?php if($page == 2) { ?> active <?php }?>">
+                    <li class="nav-item <?php if ($page == 2) { ?> active <?php }?>">
                         <a class="nav-link" href="index.php?page=2">Ավելացնել ապրանք</a>
                     </li>
-                    <li class="nav-item <?php if($page == 3) { ?> active <?php }?>">
+                    <li class="nav-item <?php if ($page == 3) { ?> active <?php }?>">
                         <a class="nav-link"  href="index.php?page=3">Բոլոր գնված ապրանքները</a>
                     </li>
                 </ul>
@@ -200,15 +203,15 @@ if($ordered == 1){
 <div class="container">
     <div class="row">
         <?php
-        if($page == 0){
+        if ($page == 0) {
             ?>
             <div class="col-md-12">
                 <h1>Products</h1>
             </div>
             <?php
-            $prd_query = new Requests($conn,'products');
+            $prd_query = new Requests($conn, 'products');
             $get_products = $prd_query->select();
-            foreach($get_products as $prd){
+            foreach ($get_products as $prd) {
                 ?>
                 <div class="col-md-3" style="margin-top: 10px;">
                     <div class="section_products">
@@ -233,9 +236,8 @@ if($ordered == 1){
                 </div>
                 <?php
             }
-        }
-        else if($page == 2){
-            if($errors == True){
+        } elseif ($page == 2) {
+            if ($errors == true) {
                 ?>
                 <p style="color: red;"><?=$valid?></p>
                 <?php
@@ -252,8 +254,7 @@ if($ordered == 1){
                 <input class="btn btn-primary" value="Ավելացնել" type="submit" name="add_product" style="margin-top: 20px;">
             </div>
             <?php
-        }
-        else if($page == 3){
+        } elseif ($page == 3) {
             ?>
             <table>
                 <tr>
@@ -274,9 +275,9 @@ if($ordered == 1){
                     </th>-->
                 </tr>
             <?php
-            $all_orders = new Requests($conn,'orders');
+            $all_orders = new Requests($conn, 'orders');
             $get_orders_query = $all_orders->select();
-            foreach($get_orders_query as $ord){
+            foreach ($get_orders_query as $ord) {
                 ?>
                 <tr>
                     <td><?=$ord['id']?></td>

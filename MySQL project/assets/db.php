@@ -7,16 +7,16 @@ class DB{
     private $pass = '';
     private $db = 'mysql_task';
 
-    private function __construct(){
+    private function __construct() {
         $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db}",$this->user,$this->pass);
     }
-    public static function getinstance(){
-        if(!self::$instance){
+    public static function getinstance() {
+        if (!self::$instance) {
             self::$instance = new DB();
         }
         return self::$instance;
     }
-    public function getconnection(){
+    public function getconnection() {
         return $this->conn;
     }
 }
