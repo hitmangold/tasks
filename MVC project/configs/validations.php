@@ -16,29 +16,21 @@ class Valid
         $this->name = $name;
         $this->description = $description;
         $this->price = $price;
-        if (strlen($this->name) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք մուտքագրել անվանումը';
-            }
+        if (strlen($this->name) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք մուտքագրել անվանումը';
         }
-        if (strlen($this->price) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք մուտքագրել գինը';
-            }
+        if (strlen($this->price) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք մուտքագրել գինը';
         }
-        if (!is_numeric($this->price)) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք մուտքագրել ճիշտ գին';
-            }
+        if (!is_numeric($this->price) && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք մուտքագրել ճիշտ գին';
         }
-        if (strlen($this->description) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք մուտքագրել նկարագրությունը';
-            }
+        if (strlen($this->description) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք մուտքագրել նկարագրությունը';
         }
         if ($this->errors['error'] == False) {
             return null;
@@ -56,29 +48,21 @@ class Valid
         $this->name = $name;
         $this->surname = $surname;
         $this->email = $email;
-        if (strlen($this->name) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք նշել ձեր անունը';
-            }
+        if (strlen($this->name) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք նշել ձեր անունը';
         }
-        if (strlen($this->surname) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք նշել ձեր ազգանունը';
-            }
+        if (strlen($this->surname) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք նշել ձեր ազգանունը';
         }
-        if (strlen($this->email) == 0) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'Խնդրում ենք նշել ձեր էլ.հասցեն';
-            }
+        if (strlen($this->email) == 0 && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'Խնդրում ենք նշել ձեր էլ.հասցեն';
         }
-        if (!preg_match('/^[a-z]+@[a-z]+[.][a-z]+/', $this->email)) {
-            if ($this->errors['error'] == False) {
-                $this->errors['error'] = True;
-                $this->errors['message'] = 'էլ.հասցեն սխալ է մուտքագրված';
-            }
+        if (!preg_match('/^[a-z]+@[a-z]+[.][a-z]+/', $this->email) && $this->errors['error'] == False) {
+            $this->errors['error'] = True;
+            $this->errors['message'] = 'էլ.հասցեն սխալ է մուտքագրված';
         }
         if ($this->errors['error'] == False) {
             return null;
