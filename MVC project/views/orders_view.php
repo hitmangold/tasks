@@ -20,15 +20,15 @@
             </tr>
             <?php
             foreach ($data as $ord) {
-            ?>
-            <tr>
-                <td><?= $ord['id'] ?></td>
-                <td><?= $ord['user_id'] ?></td>
-                <td><?= $ord['sum'] ?>$</td>
-                <td><?= $ord['order_date'] ?></td>
-                <!--<td class="see_more" data-id="">Տեսնել ավելին</td>-->
-            </tr>
-            <?php
+                ?>
+                <tr>
+                    <td><?= $ord['id'] ?></td>
+                    <td><?= $ord['user_id'] ?></td>
+                    <td><?= $ord['sum'] ?>$</td>
+                    <td><?= $ord['order_date'] ?></td>
+                    <!--<td class="see_more" data-id="">Տեսնել ավելին</td>-->
+                </tr>
+                <?php
             }
             ?>
         </table>

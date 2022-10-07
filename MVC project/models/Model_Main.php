@@ -78,7 +78,7 @@ class Model_Main
                 $cart_id = $crt[0];
                 $crt_query = new Query($conn, 'products', 'id', $cart_id);
                 $get_prds = $crt_query->select();
-                foreach($get_prds as $prod){
+                foreach ($get_prds as $prod) {
                     $data['cart'][$counter] = array(
                         'title' => $prod['name'],
                         'count' => $crt[1],

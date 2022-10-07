@@ -83,11 +83,11 @@ if ($data['ordered'] == 1) {
                     <img src="views/images/image_preview.png" width="100%" height="auto">
                     <div style="padding-left: 10px; margin-top: 10px; margin-bottom: 10px;">
                         <form action="index" method="post">
-                            <p class="price" data-price="<?=$prd['price']?>" style="font-weight: bold;">
-                                Գինը: <?=$prd['price']?>$</p>
-                            <h4 class="title_prod"><?=$prd['name']?></h4>
-                            <p class="description_prod"><?=$prd['description']?></p>
-                            <input type="hidden" name="prod_id" value="<?=$prd['id']?>">
+                            <p class="price" data-price="<?= $prd['price'] ?>" style="font-weight: bold;">
+                                Գինը: <?= $prd['price'] ?>$</p>
+                            <h4 class="title_prod"><?= $prd['name'] ?></h4>
+                            <p class="description_prod"><?= $prd['description'] ?></p>
+                            <input type="hidden" name="prod_id" value="<?= $prd['id'] ?>">
                             <select name="count">
                                 <option value="1">1 հատ</option>
                                 <option value="2">2 հատ</option>

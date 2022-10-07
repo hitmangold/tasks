@@ -1,4 +1,5 @@
 <?php
+
 class Database
 {
     private $host = 'localhost';
@@ -7,6 +8,7 @@ class Database
     private $db = 'mysql_task';
 
     private static $instance = null;
+
     private function __construct()
     {
         $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db}", $this->user, $this->pass);

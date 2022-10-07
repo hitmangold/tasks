@@ -15,9 +15,9 @@
                        style="margin-top: 20px;">
         </div>
         <?php
-        if($data['errors'] == true){
+        if ($data['errors'] == true) {
             ?>
-            <div class="col-md-12"><p style="color:red;"><?=$data['message']?></p></div>
+            <div class="col-md-12"><p style="color:red;"><?= $data['message'] ?></p></div>
             <?php
         }
         ?>

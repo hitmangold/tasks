@@ -1,4 +1,5 @@
 <?php
+
 class Model_Main
 {
     public function get_data()

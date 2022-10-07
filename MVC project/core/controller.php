@@ -1,5 +1,7 @@
 <?php
-class Controller {
+
+class Controller
+{
 
     public $model;
     public $view;
