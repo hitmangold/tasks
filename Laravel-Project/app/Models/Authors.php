@@ -9,9 +9,11 @@ use DB;
 class Authors extends Model
 {
     use HasFactory;
+    protected $table = 'authors';
 
-    public function AuthorsModel()
+    public function books()
     {
-        return DB::table('authors')->select('*')->get();
+        return $this->belongsToMany(Books::class, 'books_authors');
     }
+
 }
