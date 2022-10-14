@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>Laravel Project</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js" defer></script>
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
@@ -16,10 +18,10 @@
             </div>
             <div class="col-md-8" style="text-align: right">
                 <ul>
-                    <li @if(request()->is('/')) class="active" @endif><a href="{{ route('index') }}">Բոլոր գրքերը</a></li>
-                    <li @if(request()->is('authors')) class="active" @endif><a href="{{ route('authors') }}">Բոլոր հեղինակները</a></li>
-                    <li><a href="">Ստեղծել գիրք</a></li>
-                    <li><a href="">Ստեղծել հեղինակ</a></li>
+                    <li @if(request()->is('/') || request()->is('search')) class="active" @endif><a href="{{ route('index') }}">Բոլոր գրքերը</a></li>
+                    <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="{{ route('authors') }}">Բոլոր հեղինակները</a></li>
+                    <li @if(request()->is('add')) class="active" @endif><a href="{{ route('add') }}">Ստեղծել գիրք</a></li>
+                    <li @if(request()->is('add_authors')) class="active" @endif><a href="{{ route('add_authors') }}">Ստեղծել հեղինակ</a></li>
                 </ul>
             </div>
         </div>
