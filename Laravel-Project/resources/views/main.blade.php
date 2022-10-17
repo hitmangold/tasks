@@ -21,7 +21,11 @@
                 <img src="images/book.jpg" width="100%">
                 <h4>Վերնագիր: {{ $book['title'] }}</h4>
                 <p style="margin-bottom: 10px;">Գինը: {{ $book['price'] }}դր</p>
-                <img src="images/edit.png" width="22px" style="margin-bottom: 15px; cursor:pointer;">
+                <form class="edit_form" data-id="{{ $book['id'] }}" action="{{ Route('edit_book') }}" method="GET">
+                    @csrf
+                    <input type="hidden" value="{{ $book['id'] }}" name="edit_id">
+                </form>
+                <img src="images/edit.png" class="edit_action" data-id="{{ $book['id'] }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
                 <img src="images/delete.png" class="delete_action" data-id="{{ $book['id'] }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
                 <div class="click_to_sec" data-id="{{ $book['id'] }}"
                      style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">

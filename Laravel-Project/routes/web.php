@@ -27,6 +27,8 @@ Route::get('/search', [BooksController::class, 'search'])->name('search');
 Route::get('/authors', [AuthorsController::class, 'main'])->name('authors');
 Route::post('/authors/del', [AuthorsController::class, 'delete'])->name('delete_author');
 Route::get('/authors_edit', [AuthorsController::class, 'edit'])->name('edit_author');
+Route::get('/books_edit', [BooksController::class, 'edit'])->name('edit_book');
+Route::post('/books_update', [BooksController::class, 'update'])->name('update_books');
 Route::post('/authors_update', [AuthorsController::class, 'update'])->name('update_authors');
 Route::get('/search_authors', [AuthorsController::class, 'search'])->name('search_authors');
 Route::get('/add', [AddController::class, 'main'])->name('add');
