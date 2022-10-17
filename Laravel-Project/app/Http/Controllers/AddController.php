@@ -19,8 +19,7 @@ class AddController extends Controller
     public function add(Request $request)
     {
         $books = new Books;
-        $books->title = $request->input('title');
-        $books->price = $request->input('price');
+        $books->fill(array('title' => $request->input('title'), 'price' => $request->input('price')));
         $this->validate($request, [
             'title' => 'required|min:8',
             'price' => 'required|numeric',
@@ -30,8 +29,7 @@ class AddController extends Controller
         $book_id = $books->id;
         foreach ($request->input('authors') as $author) {
             $books_authors = new Books_Authors;
-            $books_authors->authors_id = $author;
-            $books_authors->books_id = $book_id;
+            $books_authors->fill(array('authors_id' => $author, 'books_id' => $book_id));
             $books_authors->save();
         }
         return redirect()->back()->with('message', 'Գիրքը հաջողությամբ ստեղծվել է');

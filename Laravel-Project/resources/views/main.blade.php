@@ -19,15 +19,15 @@
         <div class="col-md-4" style="margin-top: 15px;">
             <div class="cnr">
                 <img src="images/book.jpg" width="100%">
-                <h4>Վերնագիր: {{ $book['title'] }}</h4>
-                <p style="margin-bottom: 10px;">Գինը: {{ $book['price'] }}դր</p>
-                <form class="edit_form" data-id="{{ $book['id'] }}" action="{{ Route('edit_book') }}" method="GET">
+                <h4>Վերնագիր: {{ $book->title }}</h4>
+                <p style="margin-bottom: 10px;">Գինը: {{ $book->price }}դր</p>
+                <form class="edit_form" data-id="{{ $book->id }}" action="{{ Route('edit_book') }}" method="GET">
                     @csrf
-                    <input type="hidden" value="{{ $book['id'] }}" name="edit_id">
+                    <input type="hidden" value="{{ $book->id }}" name="edit_id">
                 </form>
-                <img src="images/edit.png" class="edit_action" data-id="{{ $book['id'] }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
-                <img src="images/delete.png" class="delete_action" data-id="{{ $book['id'] }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
-                <div class="click_to_sec" data-id="{{ $book['id'] }}"
+                <img src="images/edit.png" class="edit_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
+                <img src="images/delete.png" class="delete_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                <div class="click_to_sec" data-id="{{ $book->id }}"
                      style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
                     <div class="row">
                         <div class="col-md-8">
@@ -47,7 +47,7 @@
             </div>
         </div>
     @endforeach
-    @if( isset($result) && $result == 0 )
+    @if( request()->is('search') && empty($books[0]) )
         <div class="col-md-12" style="margin-top: 10px;">
             <div class="alert alert-danger" role="alert">
                 Տվյալներ չեն գտնվել

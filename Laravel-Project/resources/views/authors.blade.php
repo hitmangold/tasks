@@ -14,13 +14,13 @@
         <div class="col-md-4" style="margin-top: 15px;">
             <div class="cnr">
                 <img src="images/scenarist.jpeg" width="100%">
-                <h6 style="margin-top: 10px; margin-bottom: 10px;">Անուն Ազգանուն: {{ $author['name'] }} {{ $author['surname'] }}</h6>
-                <form class="edit_form" data-id="{{ $author['id'] }}" action="{{ Route('edit_author') }}" method="GET">
+                <h6 style="margin-top: 10px; margin-bottom: 10px;">Անուն Ազգանուն: {{ $author->name }} {{ $author->surname }}</h6>
+                <form class="edit_form" data-id="{{ $author->id }}" action="{{ Route('edit_author') }}" method="GET">
                     @csrf
-                    <input type="hidden" value="{{ $author['id'] }}" name="edit_id">
+                    <input type="hidden" value="{{ $author->id }}" name="edit_id">
                 </form>
-                <img src="images/edit.png" class="edit_action" data-id="{{ $author['id'] }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
-                <img src="images/delete.png" class="delete_action" data-id="{{ $author['id'] }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                <img src="images/edit.png" class="edit_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
+                <img src="images/delete.png" class="delete_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
                 <div data-id="{{ $author->id }}" class="click_to_sec"
                     style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
                     <div class="row">
@@ -40,7 +40,7 @@
             </div>
         </div>
     @endforeach
-    @if( isset($result) && $result == 0 )
+    @if( request()->is('search_authors') && empty($authors[0]) )
         <div class="col-md-12" style="margin-top: 10px;">
             <div class="alert alert-danger" role="alert">
                 Տվյալներ չեն գտնվել

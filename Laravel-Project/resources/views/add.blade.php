@@ -17,10 +17,10 @@
     <div class="col-md-12">
         <div class="row">
                 <div class="col-md-6">
-                    <input type="text" @if(isset($books)) value="{{ $books['title'] }}" @endif name="title" class="form-control" placeholder="Գրքի անվանումը">
+                    <input type="text" @if(isset($books)) value="{{ $books->title }}" @endif name="title" class="form-control" placeholder="Գրքի անվանումը">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" @if(isset($books)) value="{{ $books['price'] }}" @endif name="price" class="form-control" placeholder="Գրքի գինը">
+                    <input type="text" @if(isset($books)) value="{{ $books->price }}" @endif name="price" class="form-control" placeholder="Գրքի գինը">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">
                     <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;">
@@ -28,7 +28,7 @@
                             @foreach($authors as $author)
                                 {{ $count = 0 }}
                                 @foreach($books->authors as $author_book)
-                                    @if($author['id'] == $author_book['id'])
+                                    @if($author->id == $author_book->id)
                                         {{ $count = 1 }}
                                         <option selected="selected" value="{{ $author->id }}">{{ $author->name }} {{ $author->surname }}</option>
                                     @endif
@@ -49,7 +49,7 @@
                     @if(!isset($books))
                         <input type="submit" value="Ստեղծել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
                     @else
-                        <input type="hidden" value="{{ $books['id'] }}" name="edit_id">
+                        <input type="hidden" value="{{ $books->id }}" name="edit_id">
                         <input type="submit" value="Պահպանել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
                     @endif
                 </div>

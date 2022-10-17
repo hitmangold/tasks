@@ -15,6 +15,7 @@ class AddAuthorsController extends Controller
         $books = Books::all();
         return view('add_authors', compact('books'));
     }
+
     public function add(Request $request)
     {
         $authors = new Authors;

@@ -17,10 +17,10 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-6">
-                    <input type="text" @if(isset($author)) value="{{ $author['name'] }}" @endif name="name" class="form-control" placeholder="Հեղինակի անունը">
+                    <input type="text" @if(isset($author)) value="{{ $author->name }}" @endif name="name" class="form-control" placeholder="Հեղինակի անունը">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" @if(isset($author)) value="{{ $author['surname'] }}" @endif name="surname" class="form-control" placeholder="Հեղինակի ազգանունը">
+                    <input type="text" @if(isset($author)) value="{{ $author->surname }}" @endif name="surname" class="form-control" placeholder="Հեղինակի ազգանունը">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">
                     <select class="js-example-basic-multiple" name="books[]" multiple="multiple" style="height: 40px; width: 100%;">
@@ -28,7 +28,7 @@
                             @foreach($books as $book)
                                 {{ $count = 0 }}
                                 @foreach($author->books as $author_book)
-                                    @if($book['id'] == $author_book['id'])
+                                    @if($book->id == $author_book->id)
                                         {{ $count = 1 }}
                                         <option selected="selected" value="{{ $book->id }}">{{ $book->title }}</option>
                                     @endif
