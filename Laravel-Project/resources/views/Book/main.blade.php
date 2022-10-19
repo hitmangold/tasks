@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="col-md-12">
-        <form action="{{ route('search_authors') }}" method="GET">
+        <form action="{{ route('books.index') }}" method="GET">
             <input type="text" name="key" placeholder="Փնտրել"
                    style="width: 250px; height: 35px; border-radius: 6px; padding-left: 5px; outline: none!important; border: 1px solid gray;">
             <button
@@ -10,37 +10,43 @@
                 type="submit"><img src="images/search.png" width="25"></button>
         </form>
     </div>
-    @foreach($authors as $author)
+    @if(empty($books[0]) && !isset($count))
+        <div class="col-md-12" style="margin-top: 10px;">
+            <p style="font-weight: 500;">Դեր չկան հրապարակված գրքեր</p>
+        </div>
+    @endif
+    @foreach($books as $book)
         <div class="col-md-4" style="margin-top: 15px;">
             <div class="cnr">
-                <img src="images/scenarist.jpeg" width="100%">
-                <h6 style="margin-top: 10px; margin-bottom: 10px;">Անուն Ազգանուն: {{ $author->name }} {{ $author->surname }}</h6>
-                <form class="edit_form" data-id="{{ $author->id }}" action="{{ Route('edit_author') }}" method="GET">
+                <a href="{{ route('books.show', $book->id) }}"><img src="images/book.jpg" width="100%"></a>
+                <h4>Վերնագիր: {{ $book->title }}</h4>
+                <p style="margin-bottom: 10px;">Գինը: {{ $book->price }}դր</p>
+                <form class="edit_form" data-id="{{ $book->id }}" action="{{ Route('books.edit', $book->id) }}" method="GET">
                     @csrf
-                    <input type="hidden" value="{{ $author->id }}" name="edit_id">
                 </form>
-                <img src="images/edit.png" class="edit_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
-                <img src="images/delete.png" class="delete_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
-                <div data-id="{{ $author->id }}" class="click_to_sec"
-                    style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
+                <img src="images/edit.png" class="edit_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
+                <img src="images/delete.png" class="delete_book_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                <div class="click_to_sec" data-id="{{ $book->id }}"
+                     style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
                     <div class="row">
                         <div class="col-md-8">
-                            <p>Հեղինակային գրքեր</p>
+                            <p>Հեղինակներ</p>
                         </div>
                         <div class="col-md-4" align="right">
                             <img src="images/upload.png" width="12px">
                         </div>
                     </div>
                 </div>
-                <ul data-id="{{ $author->id }}" class="show_sec" style="font-weight: 500;  font-size: 17px; margin-top: 15px; display: none">
-                    @foreach($author->books as $book)
-                        <li>{{ $book->title }}</li>
+                <ul data-id="{{ $book->id }}" class="show_sec"
+                    style="font-weight: 500; font-size: 17px; margin-top: 15px; display: none;">
+                    @foreach($book->authors as $author)
+                        <li>{{ $author->name }} {{ $author->surname }}</li>
                     @endforeach
                 </ul>
             </div>
         </div>
     @endforeach
-    @if( request()->is('search_authors') && empty($authors[0]) )
+    @if( isset($count) && $count == 0 )
         <div class="col-md-12" style="margin-top: 10px;">
             <div class="alert alert-danger" role="alert">
                 Տվյալներ չեն գտնվել
@@ -57,10 +63,10 @@
                     </button>
                 </div>
                 <div class="modal-body" align="center">
-                    <p style="font-weight: 500;">Դուք ցանկանում հեռացնել այս հեղինակին?</p>
-                    <form action="{{ Route('delete_author') }}" method="POST">
+                    <p style="font-weight: 500;">Դուք ցանկանում հեռացնել այս գիրքը?</p>
+                    <form class="form_change" action="" method="POST">
+                        @method('DELETE')
                         @csrf
-                        <input type="hidden" value="" name="author_id" class="remove_value">
                         <button type="submit" class="modal_btn" style="background: #bd2130;">Հեռացնել</button>
                         <input type="button" class="modal_btn cancel_action" style="background: #6b7280;" value="Չեղարկել">
                     </form>

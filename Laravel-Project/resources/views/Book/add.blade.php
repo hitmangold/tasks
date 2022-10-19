@@ -2,11 +2,13 @@
 
 @section('content')
     @if(!isset($books))
-    <form action="{{ route('add_book') }}" method="POST">
-        @else
-            <form action="{{ route('update_books') }}" method="POST">
-                @endif
+    <form action="{{ route('books.store') }}" method="POST">
         @csrf
+        @else
+            <form action="{{ route('books.update', $books->id) }}" method="POST">
+                @method('PUT')
+                @csrf
+                @endif
         @if(session()->has('message'))
             <div class="col-md-12">
                 <div class="alert alert-success" role="alert">
@@ -17,13 +19,13 @@
     <div class="col-md-12">
         <div class="row">
                 <div class="col-md-6">
-                    <input type="text" @if(isset($books)) value="{{ $books->title }}" @endif name="title" class="form-control" placeholder="Գրքի անվանումը">
+                    <input type="text" @if(isset($show)) readonly @endif @if(isset($books)) value="{{ $books->title }}" @endif name="title" class="form-control" placeholder="Գրքի անվանումը">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" @if(isset($books)) value="{{ $books->price }}" @endif name="price" class="form-control" placeholder="Գրքի գինը">
+                    <input type="text" @if(isset($show)) readonly @endif @if(isset($books)) value="{{ $books->price }}" @endif name="price" class="form-control" placeholder="Գրքի գինը">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">
-                    <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;">
+                    <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;" @if(isset($show)) disabled @endif>
                         @if(isset($books))
                             @foreach($authors as $author)
                                 {{ $count = 0 }}
@@ -46,11 +48,12 @@
                 </div>
                 <div class="col-md-6"></div>
                 <div class="col-md-12">
-                    @if(!isset($books))
-                        <input type="submit" value="Ստեղծել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
-                    @else
-                        <input type="hidden" value="{{ $books->id }}" name="edit_id">
-                        <input type="submit" value="Պահպանել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
+                    @if(!isset($show))
+                        @if(!isset($books))
+                            <input type="submit" value="Ստեղծել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
+                        @else
+                            <input type="submit" value="Պահպանել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
+                        @endif
                     @endif
                 </div>
                 <div class="col-md-12" style="margin-top: 10px;">
