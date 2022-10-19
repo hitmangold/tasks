@@ -29,35 +29,35 @@ class BookController extends Controller
 
     public function store(Request $request)
     {
-        $books = new Book;
-        $books->fill(array('title' => $request->input('title'), 'price' => $request->input('price')));
+        $book = new Book;
+        $book->fill(array('title' => $request->input('title'), 'price' => $request->input('price')));
         $this->validate($request, [
             'title' => 'required|min:8',
             'price' => 'required|numeric',
             'authors' => 'required'
         ]);
-        $books->save();
-        $book_id = $books->id;
+        $book->save();
+        $book_id = $book->id;
         foreach ($request->input('authors') as $author) {
-            $books_authors = new BookAuthor;
-            $books_authors->fill(array('author_id' => $author, 'book_id' => $book_id));
-            $books_authors->save();
+            $BookAuthor = new BookAuthor;
+            $BookAuthor->fill(array('author_id' => $author, 'book_id' => $book_id));
+            $BookAuthor->save();
         }
         return redirect()->back()->with('message', 'Գիրքը հաջողությամբ ստեղծվել է');
     }
 
     public function show($id)
     {
-        $books = Book::with('authors')->find($id);
+        $book = Book::with('authors')->find($id);
         $authors = Author::all();
-        return view('Book.add', compact('authors', 'books'))->with('show', 1);
+        return view('Book.add', compact('authors', 'book'))->with('show', 1);
     }
 
     public function edit($id)
     {
-        $books = Book::with('authors')->find($id);
+        $book = Book::with('authors')->find($id);
         $authors = Author::all();
-        return view('Book.add', compact('authors', 'books'));
+        return view('Book.add', compact('authors', 'book'));
     }
 
     public function update(Request $request, $id)
@@ -71,21 +71,21 @@ class BookController extends Controller
             'price' => 'required|numeric',
             'authors' => 'required'
         ]);
-        $author = $request->input('authors');
-        $booksAuthors_id = [];
+        $authors = $request->input('authors');
+        $BooksAuthorsId = [];
         foreach ($book->BooksAuthors as $author_books) {
-            array_push($booksAuthors_id, $author_books['authors_id']);
+            array_push($BooksAuthorsId, $author_books->author_id);
         }
-        $deleted_repeat_one = array_diff($booksAuthors_id, $author);
-        $deleted_repeat_two = array_diff($author, $booksAuthors_id);
-        if (!empty($deleted_repeat_one)) {
-            BookAuthor::where('book_id', $book_id)->whereIn('author_id', $deleted_repeat_one)->delete();
+        $DeletedRepeatOne = array_diff($BooksAuthorsId, $authors);
+        $DeletedRepeatTwo = array_diff($authors, $BooksAuthorsId);
+        if (!empty($DeletedRepeatOne)) {
+            BookAuthor::where('book_id', $book_id)->whereIn('author_id', $DeletedRepeatOne)->delete();
         }
-        if (!empty($deleted_repeat_two)) {
-            foreach ($deleted_repeat_two as $author) {
-                $books_authors = new BookAuthor;
-                $books_authors->fill(array('author_id' => $author, 'book_id' => $book_id));
-                $books_authors->save();
+        if (!empty($DeletedRepeatTwo)) {
+            foreach ($DeletedRepeatTwo as $author) {
+                $BookAuthor = new BookAuthor;
+                $BookAuthor->fill(array('author_id' => $author, 'book_id' => $book_id));
+                $BookAuthor->save();
             }
         }
         $book->save();
