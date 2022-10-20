@@ -12,18 +12,18 @@ class AuthorController extends Controller
 {
     public function index(Request $request)
     {
+        $query = Author::with('Books');
         if ($request->input('search_name') && $request->input('search_surname')) {
-            $authors = Author::with('Books')->where('name', 'like', '%' . $request->input('search_name') . '%')->Where('surname', 'like', '%' . $request->input('search_surname') . '%')->paginate(3);
-        } else {
-            $authors = Author::with('books')->paginate(3);
+            $query = $query->where('name', 'like', '%' . $request->input('search_name') . '%')->Where('surname', 'like', '%' . $request->input('search_surname') . '%');
         }
-        return view('Author.authors', compact('authors'));
+        $authors = $query->paginate(3);
+        return view('Author.index', compact('authors'));
     }
 
     public function create()
     {
         $books = Book::all();
-        return view('Author.add_authors', compact('books'));
+        return view('Author.create', compact('books'));
     }
 
     public function store(Request $request)
@@ -53,14 +53,14 @@ class AuthorController extends Controller
     {
         $author = Author::with('books')->find($id);
         $books = Book::all();
-        return view('Author.add_authors', compact('books', 'author'))->with('show', 1);
+        return view('Author.show', compact('books', 'author'))->with('show', 1);
     }
 
     public function edit($id)
     {
         $author = Author::with('books')->find($id);
         $books = Book::all();
-        return view('Author.add_authors', compact('books', 'author'));
+        return view('Author.edit', compact('books', 'author'));
     }
 
     public function update(Request $request, $id)
@@ -93,7 +93,7 @@ class AuthorController extends Controller
             }
         }
         $author->save();
-        return redirect('authors');
+        return redirect('/authors');
     }
 
     public function destroy($id)
