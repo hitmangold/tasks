@@ -12,12 +12,11 @@ class AuthorController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->input('key')) {
-            $search_key = $request->input('key');
-            $authors = Author::with('Books')->where('name', 'like', '%' . $search_key . '%')->orWhere('surname', 'like', '%' . $search_key . '%')->get();
-            return view('Author.authors', compact('authors'))->with('count', $authors->count());
+        if ($request->input('search_name') && $request->input('search_surname')) {
+            $authors = Author::with('Books')->where('name', 'like', '%' . $request->input('search_name') . '%')->Where('surname', 'like', '%' . $request->input('search_surname') . '%')->paginate(3);
+        } else {
+            $authors = Author::with('books')->paginate(3);
         }
-        $authors = Author::with('books')->get();
         return view('Author.authors', compact('authors'));
     }
 
@@ -41,10 +40,10 @@ class AuthorController extends Controller
         $books = $request->input('books');
         if (!is_null($books)) {
             foreach ($books as $book) {
-                $BookAuthor = new BookAuthor;
-                $BookAuthor->author_id = $author_id;
-                $BookAuthor->book_id = $book;
-                $BookAuthor->save();
+                $bookAuthor = new BookAuthor;
+                $bookAuthor->author_id = $author_id;
+                $bookAuthor->book_id = $book;
+                $bookAuthor->save();
             }
         }
         return redirect()->back()->with('message', 'Հեղինակը հաջողությամբ ստեղծվել է');
@@ -77,20 +76,20 @@ class AuthorController extends Controller
         if ($books == null) {
             $books = [];
         }
-        $BooksAuthorsId = [];
+        $booksAuthorsId = [];
         foreach ($author->BooksAuthors as $author_books) {
-            array_push($BooksAuthorsId, $author_books->book_id);
+            array_push($booksAuthorsId, $author_books->book_id);
         }
-        $DeletedRepeatOne = array_diff($BooksAuthorsId, $books);
-        $DeletedRepeatTwo = array_diff($books, $BooksAuthorsId);
-        if (!empty($DeletedRepeatOne)) {
-            BookAuthor::where('author_id', $author_id)->whereIn('book_id', $DeletedRepeatOne)->delete();
+        $deletedRepeatOne = array_diff($booksAuthorsId, $books);
+        $deletedRepeatTwo = array_diff($books, $booksAuthorsId);
+        if (!empty($deletedRepeatOne)) {
+            BookAuthor::where('author_id', $author_id)->whereIn('book_id', $deletedRepeatOne)->delete();
         }
-        if (!empty($DeletedRepeatTwo)) {
-            foreach ($DeletedRepeatTwo as $book) {
-                $BookAuthor = new BookAuthor;
-                $BookAuthor->fill(array('author_id' => $author_id, 'book_id' => $book));
-                $BookAuthor->save();
+        if (!empty($deletedRepeatTwo)) {
+            foreach ($deletedRepeatTwo as $book) {
+                $bookAuthor = new BookAuthor;
+                $bookAuthor->fill(array('author_id' => $author_id, 'book_id' => $book));
+                $bookAuthor->save();
             }
         }
         $author->save();

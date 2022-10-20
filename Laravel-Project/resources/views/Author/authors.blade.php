@@ -3,7 +3,9 @@
 @section('content')
     <div class="col-md-12">
         <form action="" method="GET">
-            <input type="text" name="key" placeholder="Փնտրել"
+            <input type="text" name="search_name" placeholder="Անուն"
+                   style="width: 250px; height: 35px; border-radius: 6px; padding-left: 5px; outline: none!important; border: 1px solid gray;">
+            <input type="text" name="search_surname" placeholder="Ազգանուն"
                    style="width: 250px; height: 35px; border-radius: 6px; padding-left: 5px; outline: none!important; border: 1px solid gray;">
             <button
                 style="height: 35px; background: #4bb1b1; width: 60px; border-radius: 6px; outline: none!important; border: none; cursor:pointer;"
@@ -39,6 +41,9 @@
             </div>
         </div>
     @endforeach
+    <div class="col-md-12" style="margin-top: 25px;">
+        {{$authors->withQueryString()->onEachSide(1)->links()}}
+    </div>
     @if( isset($count) && $count == 0 )
         <div class="col-md-12" style="margin-top: 10px;">
             <div class="alert alert-danger" role="alert">

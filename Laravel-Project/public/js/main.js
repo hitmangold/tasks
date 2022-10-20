@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    $(".pagination").addClass("justify-content-center");
     function getCurrentURL (type) {
         if (type == 1) {
             return window.location.href;
