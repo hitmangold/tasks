@@ -17,13 +17,13 @@ class BookController extends Controller
             $query = $query->where('title', 'like', '%' . $request->input('search_title') . '%');
         }
         $books = $query->paginate(3);
-        return view('Book.index', compact('books'))->with('count', $books->count());
+        return view('book.index', compact('books'))->with('count', $books->count());
     }
 
     public function create()
     {
         $authors = Author::all();
-        return view('Book.create', compact('authors'));
+        return view('book.create', compact('authors'));
     }
 
     public function store(Request $request)
@@ -42,27 +42,26 @@ class BookController extends Controller
             $bookAuthor->fill(array('author_id' => $author, 'book_id' => $book_id));
             $bookAuthor->save();
         }
-        return redirect()->back()->with('message', 'Գիրքը հաջողությամբ ստեղծվել է');
+        return redirect()->route('books.create')->with('message', 'Գիրքը հաջողությամբ ստեղծվել է');
     }
 
     public function show($id)
     {
         $book = Book::with('authors')->find($id);
         $authors = Author::all();
-        return view('Book.show', compact('authors', 'book'))->with('show', 1);
+        return view('book.show', compact('authors', 'book'))->with('show', 1);
     }
 
     public function edit($id)
     {
         $book = Book::with('authors')->find($id);
         $authors = Author::all();
-        return view('Book.edit', compact('authors', 'book'));
+        return view('book.edit', compact('authors', 'book'));
     }
 
     public function update(Request $request, $id)
     {
-        $book_id = $id;
-        $book = Book::with('BooksAuthors')->find($book_id);
+        $book = Book::with('booksAuthors')->find($id);
         $book->title = $request->input('title');
         $book->price = $request->input('price');
         $this->validate($request, [
@@ -72,29 +71,28 @@ class BookController extends Controller
         ]);
         $authors = $request->input('authors');
         $booksAuthorsId = [];
-        foreach ($book->BooksAuthors as $author_books) {
+        foreach ($book->booksAuthors as $author_books) {
             array_push($booksAuthorsId, $author_books->author_id);
         }
         $deletedRepeatOne = array_diff($booksAuthorsId, $authors);
         $deletedRepeatTwo = array_diff($authors, $booksAuthorsId);
         if (!empty($deletedRepeatOne)) {
-            BookAuthor::where('book_id', $book_id)->whereIn('author_id', $deletedRepeatOne)->delete();
+            BookAuthor::where('book_id', $id)->whereIn('author_id', $deletedRepeatOne)->delete();
         }
         if (!empty($deletedRepeatTwo)) {
             foreach ($deletedRepeatTwo as $author) {
                 $bookAuthor = new BookAuthor;
-                $bookAuthor->fill(array('author_id' => $author, 'book_id' => $book_id));
+                $bookAuthor->fill(array('author_id' => $author, 'book_id' => $id));
                 $bookAuthor->save();
             }
         }
         $book->save();
-        return redirect('/');
+        return redirect()->route('books.index');
     }
 
     public function destroy($id)
     {
-        $book_id = $id;
-        $book = Book::find($book_id);
+        $book = Book::find($id);
         if ($book) {
             $book->delete();
         }
