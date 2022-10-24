@@ -1,11 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BooksController;
 use App\Http\Controllers\AuthorController;
-use App\Http\Controllers\AddController;
 use App\Http\Controllers\BookController;
-
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,8 +15,18 @@ use App\Http\Controllers\BookController;
 |
 */
 
-Route::get('/', [BookController::class, 'index']);
-Route::resources([
-    '/authors' => AuthorController::class,
-    '/books' => BookController::class,
-]);
+Route::middleware('guest')->group(function(){
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'authProccess'])->name('auth.proccess');
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/register', [AuthController::class, 'regProccess'])->name('reg.proccess');
+});
+
+Route::middleware('auth')->group(function(){
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/', [BookController::class, 'index']);
+    Route::resources([
+        '/authors' => AuthorController::class,
+        '/books' => BookController::class,
+    ]);
+});

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Book;
+use App\Models\User;
 use App\Models\BookAuthor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Book::with('authors');
+        $query = User::find(auth('web')->user()->id)->with('authors');
         if ($request->input('search_title')) {
             $query = $query->where('title', 'like', '%' . $request->input('search_title') . '%');
         }

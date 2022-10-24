@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -41,4 +43,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function authors() {
+        return $this->hasOne(Author::class);
+    }
+
+    /*public function books() {
+       return $this->belongsToMany(Book::class, 'books_authors');
+    }*/
 }

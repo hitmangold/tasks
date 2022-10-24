@@ -13,15 +13,18 @@
 <body style="background: #E0DDFA">
     <div class="container main_section">
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-1">
                 <img src="{{ URL::asset('images') }}/logo.png" width="40px">
             </div>
-            <div class="col-md-8" style="text-align: right">
+            <div class="col-md-11" style="text-align: right">
                 <ul>
                     <li @if(request()->is('/') || request()->is('search') || request()->is('books')) class="active" @endif><a href="{{ route('books.index') }}">Բոլոր գրքերը</a></li>
                     <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="{{ route('authors.index') }}">Բոլոր հեղինակները</a></li>
                     <li @if(request()->is('books/create')) class="active" @endif><a href="{{ route('books.create') }}">Ստեղծել գիրք</a></li>
                     <li @if(request()->is('authors/create')) class="active" @endif><a href="{{ route('authors.create') }}">Ստեղծել հեղինակ</a></li>
+                    <li style="margin-left: 20px;"><img src="{{ URL::asset('images') }}/user.png" width="30px"></li>
+                    <li><a href="">{{ auth('web')->user()->name }} {{ substr(auth('web')->user()->surname,0,1) }}.</a></li>
+                    <li><a href="{{ route('logout') }}"><img src="{{ URL::asset('images') }}/exit.png" width="18px"></a></li>
                 </ul>
             </div>
         </div>
