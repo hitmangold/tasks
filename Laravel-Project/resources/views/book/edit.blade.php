@@ -19,6 +19,7 @@
             <div class="col-md-6">
                 <input type="text" value="{{ $book->price }}" name="price" class="form-control" placeholder="Գրքի գինը">
             </div>
+            @if(auth('web')->user()->role == 2)
             <div class="col-md-6" style="margin-top: 15px;">
                 <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;">
                     @foreach($authors as $author)
@@ -35,7 +36,8 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-6"></div>
+                <div class="col-md-6"></div>
+            @endif
             <div class="col-md-12">
                 <input type="submit" value="Պահպանել գիրքը" style="background: #4bb1b1; color: white; height: 40px; margin-top: 15px; font-weight: 500; width: 250px; border-radius: 8px; outline: none!important; border: none; cursor:pointer;">
             </div>

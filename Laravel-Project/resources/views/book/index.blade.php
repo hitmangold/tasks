@@ -14,7 +14,7 @@
     </div>
     @if(empty($books[0]) && !isset($count))
         <div class="col-md-12" style="margin-top: 10px;">
-            <p style="font-weight: 500;">Դեր չկան հրապարակված գրքեր</p>
+            <p style="font-weight: 500;">Դեռ չկան հրապարակված գրքեր</p>
         </div>
     @endif
     @foreach($books as $book)

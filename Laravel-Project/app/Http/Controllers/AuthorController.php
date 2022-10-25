@@ -13,6 +13,10 @@ class AuthorController extends Controller
 {
     public function index(Request $request)
     {
+        $user = auth('web')->user();
+        if ($user->role != 2) {
+            return redirect('/');
+        }
         $query = Author::with('Books');
         if ($request->input('search_name')) {
             $query = $query->where('name', 'like', '%' . $request->input('search_name') . '%');
@@ -26,6 +30,10 @@ class AuthorController extends Controller
 
     public function create()
     {
+        $user = auth('web')->user();
+        if ($user->role != 2) {
+            return redirect('/');
+        }
         $books = Book::all();
         return view('author.create', compact('books'));
     }
@@ -55,6 +63,10 @@ class AuthorController extends Controller
 
     public function show($id)
     {
+        $user = auth('web')->user();
+        if ($user->role != 2) {
+            return redirect('/');
+        }
         $author = Author::with('books')->find($id);
         $books = Book::all();
         return view('author.show', compact('books', 'author'))->with('show', 1);
@@ -62,6 +74,10 @@ class AuthorController extends Controller
 
     public function edit($id)
     {
+        $user = auth('web')->user();
+        if ($user->role != 2) {
+            return redirect('/');
+        }
         $author = Author::with('books')->find($id);
         $books = Book::all();
         return view('author.edit', compact('books', 'author'));
