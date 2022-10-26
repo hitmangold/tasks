@@ -25,13 +25,13 @@
                     @foreach($authors as $author)
                         {{ $count = 0 }}
                         @foreach($book->authors as $author_book)
-                            @if($author->id == $author_book->id)
+                            @if($author->author->id == $author_book->id)
                                 {{ $count = 1 }}
-                                <option selected="selected" value="{{ $author->id }}">{{ $author->name }} {{ $author->surname }}</option>
+                                <option selected="selected" value="{{ $author->author->id }}">{{ $author->author->name }} {{ $author->author->surname }}</option>
                             @endif
                         @endforeach
                         @if($count == 0)
-                            <option value="{{ $author->id }}">{{ $author->name }} {{ $author->surname }}</option>
+                            <option value="{{ $author->author->id }}">{{ $author->author->name }} {{ $author->author->surname }}</option>
                         @endif
                     @endforeach
                 </select>

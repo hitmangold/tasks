@@ -31,8 +31,8 @@ class BookController extends Controller
 
     public function create()
     {
-        $authors = Author::all();
-        return view('book.create', compact('authors'));
+        $users = User::where('role', 1)->get();
+        return view('book.create', compact('users'));
     }
 
     public function store(Request $request)
@@ -73,14 +73,28 @@ class BookController extends Controller
 
     public function edit($id)
     {
+        $user = auth('web')->user();
+        if($user->role == 1) {
+            $userBooks = $user->author->books->find($id);
+            if (!$userBooks) {
+                return redirect()->route('books.index');
+            }
+        }
         $book = Book::with('authors')->find($id);
-        $authors = Author::all();
+        $query = User::where('role', 1);
+        $authors = $query->with('author')->get();
         return view('book.edit', compact('authors', 'book'));
     }
 
     public function update(Request $request, $id)
     {
         $user = auth('web')->user();
+        if($user->role == 1) {
+            $userBooks = $user->author->books->find($id);
+            if (!$userBooks) {
+                return redirect()->route('books.index');
+            }
+        }
         $book = Book::with('booksAuthors')->find($id);
         $book->title = $request->input('title');
         $book->price = $request->input('price');
@@ -117,6 +131,13 @@ class BookController extends Controller
 
     public function destroy($id)
     {
+        $user = auth('web')->user();
+        if($user->role == 1) {
+            $userBooks = $user->author->books->find($id);
+            if (!$userBooks) {
+                return redirect()->route('books.index');
+            }
+        }
         $book = Book::find($id);
         if ($book) {
             $book->delete();

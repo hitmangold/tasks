@@ -16,7 +16,7 @@ $(document).ready(function(){
     });
     $(".delete_action").on("click", function () {
         let id = $(this).data("id");
-        $('.form_change').attr('action',url + '/' + id);
+        $('.form_change').attr('action', host + '/authors/' + id);
         $(".modal").modal("show");
     });
     $(".delete_book_action").on("click", function (){

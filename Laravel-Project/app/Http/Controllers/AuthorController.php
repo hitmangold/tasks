@@ -40,25 +40,35 @@ class AuthorController extends Controller
 
     public function store(Request $request)
     {
-        $author = new Author;
-        $author->name = $request->input('name');
-        $author->surname = $request->input('surname');
         $this->validate($request, [
             'name' => 'required|min:3',
             'surname' => 'required|min:3',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
         ]);
-        $author->save();
-        $author_id = $author->id;
-        $books = $request->input('books');
-        if (!is_null($books)) {
-            foreach ($books as $book) {
-                $bookAuthor = new BookAuthor;
-                $bookAuthor->author_id = $author_id;
-                $bookAuthor->book_id = $book;
-                $bookAuthor->save();
+        $user = User::create([
+            "name" => $request->input('name'),
+            "surname" => $request->input('surname'),
+            "email" => $request->input('email'),
+            "password" => app('hash')->make($request->input('password'))
+        ]);
+        if ($user) {
+            $author = new Author;
+            $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname'), 'user_id' => $user->id]);
+            $author->save();
+            $author_id = $author->id;
+            $books = $request->input('books');
+            if (!is_null($books)) {
+                foreach ($books as $book) {
+                    $bookAuthor = new BookAuthor;
+                    $bookAuthor->author_id = $author_id;
+                    $bookAuthor->book_id = $book;
+                    $bookAuthor->save();
+                }
             }
+            return redirect()->route('authors.create')->with('message', 'Հեղինակը հաջողությամբ ստեղծվել է');
         }
-        return redirect()->route('authors.create')->with('message', 'Հեղինակը հաջողությամբ ստեղծվել է');
+        return redirect()->route('authors.create');
     }
 
     public function show($id)
@@ -118,8 +128,10 @@ class AuthorController extends Controller
     public function destroy($id)
     {
         $author = Author::find($id);
+        $user = User::find($author->id);
         if ($author) {
             $author->delete();
+            $user->delete();
         }
         return back();
     }

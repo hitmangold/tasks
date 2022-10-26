@@ -21,8 +21,8 @@
                 @if(auth('web')->user()->role == 2)
                 <div class="col-md-6" style="margin-top: 15px;">
                     <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;" >
-                        @foreach($authors as $author)
-                            <option value="{{ $author->id }}">{{ $author->name }} {{ $author->surname }}</option>
+                        @foreach($users as $user)
+                            <option value="{{ $user->author->id }}">{{ $user->author->name }} {{ $user->author->surname }}</option>
                         @endforeach
                     </select>
                 </div>
