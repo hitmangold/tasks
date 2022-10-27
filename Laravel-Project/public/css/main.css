@@ -40,3 +40,15 @@ body{
     color: white;
     font-weight: 500;
 }
+.btn_cart{
+    width: 250px;
+    height: 35px;
+    background-color: #17a2b8;
+    border: none;
+    outline: none!important;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    font-weight: 500;
+    margin-top: 15px;
+}

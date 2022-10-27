@@ -22,7 +22,7 @@ class BookController extends Controller
         if ($user->role == User::ROLE_AUTHOR) {
             $author = $user->author;
             $query = $author->books();
-        } elseif ($user->role == User::ROLE_ADMIN) {
+        } elseif ($user->role == User::ROLE_ADMIN || $user->role == User::ROLE_CUSTOMER) {
             $query = Book::with('authors');
         }
        /* $query = Author::with('books')->find($author_id)->books();*/
@@ -43,10 +43,11 @@ class BookController extends Controller
     {
         $user = auth('web')->user();
         $book = new Book;
-        $book->fill(array('title' => $request->input('title'), 'price' => $request->input('price')));
+        $book->fill(['title' => $request->input('title'), 'price' => $request->input('price'), 'qty' => $request->input('qty')]);
         $validBook = [
             'title' => 'required|min:8',
             'price' => 'required|numeric',
+            'qty' => 'required|numeric|not_in:0',
         ];
         if ($user->role == User::ROLE_ADMIN){
             $validBook['authors'] = "required";

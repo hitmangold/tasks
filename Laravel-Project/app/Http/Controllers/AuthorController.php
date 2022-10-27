@@ -38,12 +38,18 @@ class AuthorController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
         ]);
-        $user = User::create([
+        $userCreate = [
             'name' => $request->input('name'),
             'surname' => $request->input('surname'),
             'email' => $request->input('email'),
             'password' => app('hash')->make($request->input('password'))
-        ]);
+        ];
+        if ($request->input('role') == 'customer') {
+            $userCreate['role'] = User::ROLE_CUSTOMER;
+        } elseif ($request->input('role') == 'author') {
+            $userCreate['role'] = User::ROLE_AUTHOR;
+        }
+        $user = User::create($userCreate);
         if ($user) {
             $author = new Author;
             $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname'), 'user_id' => $user->id]);

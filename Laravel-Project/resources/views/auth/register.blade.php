@@ -135,6 +135,22 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="input-group">
+				<span class="input-group-addon">
+					<i class="fa fa-lock"></i>
+					<i class="fa fa-check"></i>
+				</span>
+                <select type="text" name="role" class="form-control">
+                    <option value="customer">
+                        Customer
+                    </option>
+                    <option value="author">
+                        Author
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block btn-lg">Sign Up</button>
         </div>
         <p class="small text-center">By clicking the Sign Up button, you agree to our <br><a href="#">Terms &amp; Conditions</a>, and <a href="#">Privacy Policy</a>.</p>

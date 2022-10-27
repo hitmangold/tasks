@@ -22,12 +22,14 @@
             <div class="cnr">
                 <a href="{{ route('books.show', $book->id) }}"><img src="images/book.jpg" width="100%"></a>
                 <h4>Վերնագիր: {{ $book->title }}</h4>
-                <p style="margin-bottom: 10px;">Գինը: {{ $book->price }}դր</p>
-                <form class="edit_form" data-id="{{ $book->id }}" action="{{ Route('books.edit', $book->id) }}" method="GET">
-                    @csrf
-                </form>
-                <img src="images/edit.png" class="edit_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
-                <img src="images/delete.png" class="delete_book_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                <p style="margin-bottom: 10px; font-size: 15px; font-weight: 500;">Գինը: {{ $book->price }}դր, Քանակը: {{ $book->qty }}</p>
+                @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER)
+                    <form class="edit_form" data-id="{{ $book->id }}" action="{{ Route('books.edit', $book->id) }}" method="GET">
+                        @csrf
+                    </form>
+                    <img src="images/edit.png" class="edit_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
+                    <img src="images/delete.png" class="delete_book_action" data-id="{{ $book->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                @endif
                 <div class="click_to_sec" data-id="{{ $book->id }}"
                      style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
                     <div class="row">
@@ -45,6 +47,9 @@
                         <li>{{ $author->name }} {{ $author->surname }}</li>
                     @endforeach
                 </ul>
+                @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER)
+                    <button class="btn_cart">Ավելացնել զամբյուղում</button>
+                @endif
             </div>
         </div>
     @endforeach

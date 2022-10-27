@@ -18,10 +18,11 @@
             </div>
             <div class="col-md-11" style="text-align: right">
                 <ul>
-                    <li @if(request()->is('/') || request()->is('search') || request()->is('books')) class="active" @endif><a href="{{ route('books.index') }}">@if(auth('web')->user()->role == 1) Իմ գրքերը @elseif(auth('web')->user()->role == 2) Բոլոր գրքերը @endif</a></li>
-                    @if(auth('web')->user()->role == 2) <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="{{ route('authors.index') }}">Բոլոր հաշիվները</a></li> @endif
-                    <li @if(request()->is('books/create')) class="active" @endif><a href="{{ route('books.create') }}">Ստեղծել գիրք</a></li>
-                    @if(auth('web')->user()->role == 2) <li @if(request()->is('authors/create')) class="active" @endif><a href="{{ route('authors.create') }}">Ստեղծել հաշիվ</a></li> @endif
+                    <li @if(request()->is('/') || request()->is('search') || request()->is('books')) class="active" @endif><a href="{{ route('books.index') }}">@if(auth('web')->user()->role == \App\Models\User::ROLE_AUTHOR) Իմ գրքերը @elseif(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN || auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) Բոլոր գրքերը @endif</a></li>
+                    @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="{{ route('authors.index') }}">Բոլոր հաշիվները</a></li> @endif
+                    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="">Իմ պատվերները</a></li> @endif
+                    @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER) <li @if(request()->is('books/create')) class="active" @endif><a href="{{ route('books.create') }}">Ստեղծել գիրք</a></li> @endif
+                    @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <li @if(request()->is('authors/create')) class="active" @endif><a href="{{ route('authors.create') }}">Ստեղծել հաշիվ</a></li> @endif
                     <li style="margin-left: 20px;"><img src="{{ URL::asset('images') }}/user.png" width="30px"></li>
                     <li><a href="">{{ auth('web')->user()->name }} {{ substr(auth('web')->user()->surname,0,1) }}.</a></li>
                     <li><a href="{{ route('logout') }}"><img src="{{ URL::asset('images') }}/exit.png" width="18px"></a></li>

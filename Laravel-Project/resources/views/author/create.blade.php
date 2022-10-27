@@ -19,6 +19,16 @@
                     <input type="text" name="surname" class="form-control" placeholder="Ազգանունը">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">
+                    <select type="text" name="role" class="form-control">
+                        <option value="customer">
+                            Customer
+                        </option>
+                        <option value="author">
+                            Author
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-6" style="margin-top: 15px;">
                     <input type="text" name="email" class="form-control" placeholder="E-mail հասցե">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">

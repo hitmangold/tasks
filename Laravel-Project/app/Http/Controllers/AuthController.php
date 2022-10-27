@@ -22,12 +22,20 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        $user = User::create([
+        $userCreate = [
             'name' => $request->input('name'),
             'surname' => $request->input('surname'),
             'email' => $request->input('email'),
             'password' => app('hash')->make($request->input('password'))
-        ]);
+        ];
+
+        if ($request->input('role') == 'customer') {
+            $userCreate['role'] = User::ROLE_CUSTOMER;
+        } elseif ($request->input('role') == 'author') {
+            $userCreate['role'] = User::ROLE_AUTHOR;
+        }
+
+        $user = User::create($userCreate);
 
         if ($user) {
             $author = new Author;

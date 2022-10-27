@@ -14,6 +14,7 @@ class User extends Authenticatable
 
     const ROLE_AUTHOR = 1;
     const ROLE_ADMIN = 2;
+    const ROLE_CUSTOMER = 3;
 
     /**
      * The attributes that are mass assignable.

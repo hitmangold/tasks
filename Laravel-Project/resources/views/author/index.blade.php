@@ -17,11 +17,13 @@
             <div class="cnr">
                 <a href="{{ route('authors.show', $author->id) }}"><img src="images/scenarist.jpeg" width="100%"></a>
                 <h6 style="margin-top: 10px; margin-bottom: 10px;">Անուն Ազգանուն: {{ $author->name }} {{ $author->surname }}</h6>
+                @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN)
                 <form class="edit_form" data-id="{{ $author->id }}" action="{{ Route('authors.edit', $author->id) }}" method="GET">
                     @csrf
                 </form>
                 <img src="images/edit.png" class="edit_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; cursor:pointer;">
                 <img src="images/delete.png" class="delete_action" data-id="{{ $author->id }}" width="22px" style="margin-bottom: 15px; margin-left: 5px; cursor:pointer;">
+                @endif
                 <div data-id="{{ $author->id }}" class="click_to_sec"
                     style="width: 100%; height: 25px; border-radius: 8px; background: #b0adc5; color: black; font-weight: 500; padding-right: 5px; padding-left: 5px; cursor:pointer;">
                     <div class="row">

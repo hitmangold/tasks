@@ -18,6 +18,9 @@
                 <div class="col-md-6">
                     <input type="text" name="price" class="form-control" placeholder="Գրքի գինը">
                 </div>
+                <div class="col-md-6" style="margin-top: 15px;">
+                    <input type="text" name="qty" class="form-control" placeholder="Գրքի քանակը">
+                </div>
                 @if(auth('web')->user()->role == 2)
                 <div class="col-md-6" style="margin-top: 15px;">
                     <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;" >
