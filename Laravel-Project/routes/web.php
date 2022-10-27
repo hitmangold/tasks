@@ -25,8 +25,6 @@ Route::middleware('guest')->group(function(){
 Route::middleware('auth')->group(function(){
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/', [BookController::class, 'index']);
-    Route::resources([
-        '/authors' => AuthorController::class,
-        '/books' => BookController::class,
-    ]);
+    Route::resource('/authors', AuthorController::class)->middleware('role');
+    Route::resource('/books', BookController::class);
 });

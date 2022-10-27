@@ -12,13 +12,17 @@ use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('book', ['only' => ['show','edit','destroy','update']]);
+    }
     public function index(Request $request)
     {
         $user = auth('web')->user();
-        if ($user->role == 1) {
+        if ($user->role == User::ROLE_AUTHOR) {
             $author = $user->author;
             $query = $author->books();
-        } else if ($user->role == 2) {
+        } elseif ($user->role == User::ROLE_ADMIN) {
             $query = Book::with('authors');
         }
        /* $query = Author::with('books')->find($author_id)->books();*/
@@ -31,7 +35,7 @@ class BookController extends Controller
 
     public function create()
     {
-        $users = User::where('role', 1)->get();
+        $users = User::where('role', User::ROLE_AUTHOR)->get();
         return view('book.create', compact('users'));
     }
 
@@ -44,20 +48,20 @@ class BookController extends Controller
             'title' => 'required|min:8',
             'price' => 'required|numeric',
         ];
-        if ($user->role == 2){
+        if ($user->role == User::ROLE_ADMIN){
             $validBook['authors'] = "required";
         }
         $this->validate($request, $validBook);
         $book->save();
         $book_id = $book->id;
-        if ($user->role == 1) {
+        if ($user->role == User::ROLE_AUTHOR) {
             $bookAuthor = new BookAuthor;
-            $bookAuthor->fill(array('author_id' => $user->id, 'book_id' => $book_id));
+            $bookAuthor->fill(['author_id' => $user->author->id, 'book_id' => $book_id]);
             $bookAuthor->save();
         } else {
             foreach ($request->input('authors') as $author) {
                 $bookAuthor = new BookAuthor;
-                $bookAuthor->fill(array('author_id' => $author, 'book_id' => $book_id));
+                $bookAuthor->fill(['author_id' => $author, 'book_id' => $book_id]);
                 $bookAuthor->save();
             }
         }
@@ -73,15 +77,8 @@ class BookController extends Controller
 
     public function edit($id)
     {
-        $user = auth('web')->user();
-        if($user->role == 1) {
-            $userBooks = $user->author->books->find($id);
-            if (!$userBooks) {
-                return redirect()->route('books.index');
-            }
-        }
         $book = Book::with('authors')->find($id);
-        $query = User::where('role', 1);
+        $query = User::where('role',User::ROLE_AUTHOR);
         $authors = $query->with('author')->get();
         return view('book.edit', compact('authors', 'book'));
     }
@@ -89,12 +86,6 @@ class BookController extends Controller
     public function update(Request $request, $id)
     {
         $user = auth('web')->user();
-        if($user->role == 1) {
-            $userBooks = $user->author->books->find($id);
-            if (!$userBooks) {
-                return redirect()->route('books.index');
-            }
-        }
         $book = Book::with('booksAuthors')->find($id);
         $book->title = $request->input('title');
         $book->price = $request->input('price');
@@ -102,11 +93,11 @@ class BookController extends Controller
             'title' => 'required|min:8',
             'price' => 'required|numeric',
         ];
-        if ($user->role == 2) {
+        if ($user->role == User::ROLE_ADMIN) {
             $validBook['authors'] = 'required';
         }
         $this->validate($request, $validBook);
-        if ($user->role == 2) {
+        if ($user->role == User::ROLE_ADMIN) {
             $authors = $request->input('authors');
             $booksAuthorsId = [];
             foreach ($book->booksAuthors as $author_books) {
@@ -131,13 +122,6 @@ class BookController extends Controller
 
     public function destroy($id)
     {
-        $user = auth('web')->user();
-        if($user->role == 1) {
-            $userBooks = $user->author->books->find($id);
-            if (!$userBooks) {
-                return redirect()->route('books.index');
-            }
-        }
         $book = Book::find($id);
         if ($book) {
             $book->delete();

@@ -13,10 +13,6 @@ class AuthorController extends Controller
 {
     public function index(Request $request)
     {
-        $user = auth('web')->user();
-        if ($user->role != 2) {
-            return redirect('/');
-        }
         $query = Author::with('Books');
         if ($request->input('search_name')) {
             $query = $query->where('name', 'like', '%' . $request->input('search_name') . '%');
@@ -30,10 +26,6 @@ class AuthorController extends Controller
 
     public function create()
     {
-        $user = auth('web')->user();
-        if ($user->role != 2) {
-            return redirect('/');
-        }
         $books = Book::all();
         return view('author.create', compact('books'));
     }
@@ -47,10 +39,10 @@ class AuthorController extends Controller
             'password' => 'required|min:6',
         ]);
         $user = User::create([
-            "name" => $request->input('name'),
-            "surname" => $request->input('surname'),
-            "email" => $request->input('email'),
-            "password" => app('hash')->make($request->input('password'))
+            'name' => $request->input('name'),
+            'surname' => $request->input('surname'),
+            'email' => $request->input('email'),
+            'password' => app('hash')->make($request->input('password'))
         ]);
         if ($user) {
             $author = new Author;
@@ -73,10 +65,6 @@ class AuthorController extends Controller
 
     public function show($id)
     {
-        $user = auth('web')->user();
-        if ($user->role != 2) {
-            return redirect('/');
-        }
         $author = Author::with('books')->find($id);
         $books = Book::all();
         return view('author.show', compact('books', 'author'))->with('show', 1);
@@ -84,10 +72,6 @@ class AuthorController extends Controller
 
     public function edit($id)
     {
-        $user = auth('web')->user();
-        if ($user->role != 2) {
-            return redirect('/');
-        }
         $author = Author::with('books')->find($id);
         $books = Book::all();
         return view('author.edit', compact('books', 'author'));
@@ -96,7 +80,7 @@ class AuthorController extends Controller
     public function update(Request $request, $id)
     {
         $author = Author::with('booksAuthors')->find($id);
-        $author->fill(array('name' => $request->input('name'), 'surname' => $request->input('surname')));
+        $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname')]);
         $this->validate($request, [
             'name' => 'required|min:3',
             'surname' => 'required|min:3',
