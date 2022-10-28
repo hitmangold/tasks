@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,4 +29,6 @@ Route::middleware('auth')->group(function(){
     Route::get('/', [BookController::class, 'index']);
     Route::resource('/authors', AuthorController::class)->middleware('role');
     Route::resource('/books', BookController::class);
+    Route::post('/add_cart', [CartController::class, 'add'])->name('add.cart');
+    Route::post('/orders/create', [OrderController::class, 'create'])->name('order.create');
 });

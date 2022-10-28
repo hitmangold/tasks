@@ -9,6 +9,7 @@ use App\Models\BookAuthor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class BookController extends Controller
 {
@@ -30,7 +31,24 @@ class BookController extends Controller
             $query = $query->where('title', 'like', '%' . $request->input('search_title') . '%');
         }
         $books = $query->paginate(3);
-        return view('book.index', compact('books'))->with('count', $books->count());
+        $view = view('book.index', compact('books'))->with('count', $books->count());
+        if ($user->role == User::ROLE_CUSTOMER && Session::get('cart')) {
+            $cart = Session::get('cart');
+            $cartData = array(
+                'ids' => [],
+                'qty' => []
+            );
+            foreach ($cart as $crt) {
+                array_push($cartData['ids'], $crt[0]);
+                array_push($cartData['qty'], $crt[1]);
+            }
+            $cartBooks = array(
+                'books' => Book::find($cartData['ids']),
+                'qty' => $cartData['qty']
+            );
+            $view = $view->with('cart', $cartBooks);
+        }
+        return $view;
     }
 
     public function create()

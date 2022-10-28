@@ -35,6 +35,76 @@
             @yield('content')
         </div>
     </div>
+    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && \Illuminate\Support\Facades\Session::get('cart'))
+    <div class="cart_menu">
+        <img src="{{ URL::asset('images') }}/cart.png" width="32px" style="margin-top: 7px; margin-left: 9px; cursor:pointer;">
+    </div>
+    <div class="cart">
+        <table>
+            <tr>
+                <th>Անվանումը</th>
+                <th>Քանակը</th>
+                <th>Գինը</th>
+            </tr>
+            @php
+            $count = 0;
+            $total = 0;
+            @endphp
+            @foreach($cart['books'] as $book)
+                <tr>
+                    <td>{{ $book->title }}</td>
+                    <td>{{ $cart['qty'][$count] }}</td>
+                    <td>{{ $book->price }}</td>
+                </tr>
+                @php
+                    $total += $book->price * $cart['qty'][$count];
+                    $count++;
+                @endphp
+            @endforeach
+        </table>
+        <div style="text-align: right; margin-right: 10px; margin-top: 10px;">
+            <p style="font-size: 17px; font-weight: 500;">Ընդհանուր: {{ $total }} դրամ</p>
+            <form action="{{ Route('order.create') }}" method="POST">
+                @csrf
+                <input type="hidden" value="{{ $total }}" name="total">
+                <button type="submit" style="width: 250px;
+        height: 35px;
+        background-color: #17a2b8;
+        border: none;
+        outline: none!important;
+        border-radius: 8px;
+        cursor: pointer;
+        color: white;
+        font-weight: 500;
+        margin-top: 15px;">Պատվիրել</button>
+            </form>
+        </div>
+        </div>
+    </div>
+    @endif
+    @if(isset($orderedMessage))
+        <div class="modal modal_order" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Պատվեր</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <img src="{{ URL::asset('images') }}/success.png" width="120px">
+                        <p style="font-weight: bold; font-size: 15px;">{{ $orderedMessage }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function (){
+                $('.modal_order').modal("show");
+            })
+        </script>
+    @endif
     <script src="js/main.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>

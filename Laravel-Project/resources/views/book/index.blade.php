@@ -22,7 +22,7 @@
             <div class="cnr">
                 <a href="{{ route('books.show', $book->id) }}"><img src="images/book.jpg" width="100%"></a>
                 <h4>Վերնագիր: {{ $book->title }}</h4>
-                <p style="margin-bottom: 10px; font-size: 15px; font-weight: 500;">Գինը: {{ $book->price }}դր, Քանակը: {{ $book->qty }}</p>
+                <p style="margin-bottom: 10px; font-size: 15px; font-weight: 500;">Գինը: {{ $book->price }}դր, @if($book->qty != 0) Քանակը: {{ $book->qty }} @else <span style="color: red;">Առկա չէ</span> @endif</p>
                 @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER)
                     <form class="edit_form" data-id="{{ $book->id }}" action="{{ Route('books.edit', $book->id) }}" method="GET">
                         @csrf
@@ -47,8 +47,15 @@
                         <li>{{ $author->name }} {{ $author->surname }}</li>
                     @endforeach
                 </ul>
-                @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER)
-                    <button class="btn_cart">Ավելացնել զամբյուղում</button>
+                @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && $book->qty != 0)
+                    <form action="{{ Route('add.cart') }}" method="POST">
+                        @csrf
+                        <input type="text" value="1" class="qty_product" data-id="{{ $book->id }}" name="qty" style="width: 40px; border: 1px solid gray; height: 35px; border-radius: 8px;">
+                        <input type="hidden" value="{{ $book->id }}" name="book_id">
+                        <img src="{{ URL::asset('images/plus.png') }}" class="add_value" data-id="{{ $book->id }}" data-qty="{{ $book->qty }}" style="width: 16px; cursor:pointer;">
+                        <img src="{{ URL::asset('images/minus.png') }}" class="minus_value" data-id="{{ $book->id }}" style="width: 16px; cursor:pointer;">
+                        <button type="submit" class="btn_cart">Ավելացնել զամբյուղում</button>
+                    </form>
                 @endif
             </div>
         </div>

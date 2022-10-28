@@ -31,4 +31,24 @@ $(document).ready(function(){
         let id = $(this).data("id");
         $(".edit_form[data-id="+id+"]").submit();
     });
+    $(".add_value").on("click",function (){
+        let id = $(this).data("id");
+        let qty = parseInt($(".qty_product[data-id="+id+"]").val());
+        let max_qty = $(this).data("qty");
+        if (qty != max_qty) {
+            qty++;
+            $(".qty_product[data-id=" + id + "]").val(qty);
+        }
+    });
+    $(".minus_value").on("click",function (){
+        let id = $(this).data("id");
+        let qty = parseInt($(".qty_product[data-id="+id+"]").val());
+        if(qty > 1){
+            qty--;
+            $(".qty_product[data-id=" + id + "]").val(qty);
+        }
+    });
+    $(".cart_menu").on("click",function (){
+        $(".cart").animate({width: 'toggle'});
+    });
 });
