@@ -51,4 +51,12 @@ $(document).ready(function(){
     $(".cart_menu").on("click",function (){
         $(".cart").animate({width: 'toggle'});
     });
+    $('.show_ordered_list').on("click",function (e){
+        e.preventDefault();
+        let id = $(this).data('id');
+        let content = $(".modal_content[data-id="+id+"]").html();
+        console.log(content);
+        $(".modal_oderbooks_body").html(content);
+        $(".modal_orderbooks").modal("show");
+    });
 });

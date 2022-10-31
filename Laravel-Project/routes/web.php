@@ -30,5 +30,6 @@ Route::middleware('auth')->group(function(){
     Route::resource('/authors', AuthorController::class)->middleware('role');
     Route::resource('/books', BookController::class);
     Route::post('/add_cart', [CartController::class, 'add'])->name('add.cart');
+    Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
     Route::post('/orders/create', [OrderController::class, 'create'])->name('order.create');
 });

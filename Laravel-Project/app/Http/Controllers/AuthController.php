@@ -8,13 +8,18 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         return view('auth.index');
     }
-    public function register() {
+
+    public function register()
+    {
         return view('auth.register');
     }
-    public function regProccess(Request $request) {
+
+    public function regProccess(Request $request)
+    {
         $this->validate($request, [
             'name' => 'required|min:3',
             'surname' => 'required|min:3',
@@ -46,7 +51,9 @@ class AuthController extends Controller
 
         return redirect(route('books.index'));
     }
-    public function authProccess(Request $request) {
+
+    public function authProccess(Request $request)
+    {
         $data = $this->validate($request, [
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -57,7 +64,9 @@ class AuthController extends Controller
         }
         return redirect(route('login'))->withErrors(['email' => 'User not found or data entered incorrectly']);
     }
-    public function logout() {
+
+    public function logout()
+    {
         auth("web")->logout();
         return redirect(route('login'));
     }

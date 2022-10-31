@@ -20,7 +20,7 @@
                 <ul>
                     <li @if(request()->is('/') || request()->is('search') || request()->is('books')) class="active" @endif><a href="{{ route('books.index') }}">@if(auth('web')->user()->role == \App\Models\User::ROLE_AUTHOR) Իմ գրքերը @elseif(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN || auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) Բոլոր գրքերը @endif</a></li>
                     @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="{{ route('authors.index') }}">Բոլոր հաշիվները</a></li> @endif
-                    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) <li @if(request()->is('authors') || request()->is('search_authors')) class="active" @endif><a href="">Իմ պատվերները</a></li> @endif
+                    <li @if(request()->is('orders')) class="active" @endif><a href="{{ route('order.index') }}">@if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) Իմ պատվերները @elseif(auth('web')->user()->role == \App\Models\User::ROLE_AUTHOR) Պատվերներ @elseif(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) Բոլոր պատվերները @endif</a></li>
                     @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER) <li @if(request()->is('books/create')) class="active" @endif><a href="{{ route('books.create') }}">Ստեղծել գիրք</a></li> @endif
                     @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <li @if(request()->is('authors/create')) class="active" @endif><a href="{{ route('authors.create') }}">Ստեղծել հաշիվ</a></li> @endif
                     <li style="margin-left: 20px;"><img src="{{ URL::asset('images') }}/user.png" width="30px"></li>
@@ -82,7 +82,7 @@
         </div>
     </div>
     @endif
-    @if(isset($orderedMessage))
+    @if(session()->has('orderedMessage'))
         <div class="modal modal_order" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -92,9 +92,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body" style="text-align: center">
                         <img src="{{ URL::asset('images') }}/success.png" width="120px">
-                        <p style="font-weight: bold; font-size: 15px;">{{ $orderedMessage }}</p>
+                        <p style="font-weight: bold; font-size: 15px;">{{ session()->get('orderedMessage') }}</p>
                     </div>
                 </div>
             </div>

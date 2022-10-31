@@ -13,7 +13,7 @@ class CartController extends Controller
         $book_id = $request->input('book_id');
         $userCart = Session::get('cart');
         if (!$userCart) {
-            $cart = [[$book_id,$qty]];
+            $cart = [[$book_id, $qty]];
             Session::put('cart', $cart);
         } else {
             $checkExistCart = 0;
@@ -24,7 +24,7 @@ class CartController extends Controller
                 }
             }
             if ($checkExistCart == 0) {
-                $cart = [$book_id,$qty];
+                $cart = [$book_id, $qty];
                 array_push($userCart, $cart);
             }
             Session::forget('cart');

@@ -15,8 +15,9 @@ class BookController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('book', ['only' => ['show','edit','destroy','update']]);
+        $this->middleware('book', ['only' => ['show', 'edit', 'destroy', 'update']]);
     }
+
     public function index(Request $request)
     {
         $user = auth('web')->user();
@@ -26,7 +27,7 @@ class BookController extends Controller
         } elseif ($user->role == User::ROLE_ADMIN || $user->role == User::ROLE_CUSTOMER) {
             $query = Book::with('authors');
         }
-       /* $query = Author::with('books')->find($author_id)->books();*/
+        /* $query = Author::with('books')->find($author_id)->books();*/
         if ($request->input('search_title')) {
             $query = $query->where('title', 'like', '%' . $request->input('search_title') . '%');
         }
@@ -67,7 +68,7 @@ class BookController extends Controller
             'price' => 'required|numeric',
             'qty' => 'required|numeric|not_in:0',
         ];
-        if ($user->role == User::ROLE_ADMIN){
+        if ($user->role == User::ROLE_ADMIN) {
             $validBook['authors'] = "required";
         }
         $this->validate($request, $validBook);
@@ -97,7 +98,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $book = Book::with('authors')->find($id);
-        $query = User::where('role',User::ROLE_AUTHOR);
+        $query = User::where('role', User::ROLE_AUTHOR);
         $authors = $query->with('author')->get();
         return view('book.edit', compact('authors', 'book'));
     }
