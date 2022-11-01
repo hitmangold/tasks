@@ -35,7 +35,7 @@
             @yield('content')
         </div>
     </div>
-    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && \Illuminate\Support\Facades\Session::get('cart'))
+    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && \Illuminate\Support\Facades\Cookie::get('cart'))
     <div class="cart_menu">
         <img src="{{ URL::asset('images') }}/cart.png" width="32px" style="margin-top: 7px; margin-left: 9px; cursor:pointer;">
     </div>

@@ -9,6 +9,7 @@ use App\Models\BookAuthor;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class BookController extends Controller
@@ -33,15 +34,15 @@ class BookController extends Controller
         }
         $books = $query->paginate(3);
         $view = view('book.index', compact('books'))->with('count', $books->count());
-        if ($user->role == User::ROLE_CUSTOMER && Session::get('cart')) {
-            $cart = Session::get('cart');
+        if ($user->role == User::ROLE_CUSTOMER && Cookie::get('cart')) {
+            $cart = json_decode(Cookie::get('cart'), true);
             $cartData = array(
                 'ids' => [],
                 'qty' => []
             );
-            foreach ($cart as $crt) {
-                array_push($cartData['ids'], $crt[0]);
-                array_push($cartData['qty'], $crt[1]);
+            foreach ($cart as $book_id => $qty) {
+                array_push($cartData['ids'], $book_id);
+                array_push($cartData['qty'], $qty);
             }
             $cartBooks = array(
                 'books' => Book::find($cartData['ids']),

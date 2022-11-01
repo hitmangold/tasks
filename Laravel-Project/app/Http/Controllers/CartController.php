@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class CartController extends Controller
@@ -11,24 +12,25 @@ class CartController extends Controller
     {
         $qty = $request->input('qty');
         $book_id = $request->input('book_id');
-        $userCart = Session::get('cart');
+        $userCart = Cookie::get('cart');
         if (!$userCart) {
-            $cart = [[$book_id, $qty]];
-            Session::put('cart', $cart);
+            $cart = array();
+            $cart[$book_id] = $qty;
+            Cookie::queue('cart', json_encode($cart), 864000);
         } else {
+            $userCart = json_decode($userCart, true);
             $checkExistCart = 0;
-            foreach ($userCart as & $crt) {
-                if ($crt[0] == $book_id) {
-                    $crt[1] += $qty;
+            foreach ($userCart as $bk_id => $q) {
+                if ($bk_id == $book_id) {
+                    $userCart[$bk_id] += $qty;
                     $checkExistCart = 1;
                 }
             }
             if ($checkExistCart == 0) {
-                $cart = [$book_id, $qty];
-                array_push($userCart, $cart);
+                $userCart[$book_id] = $qty;
             }
-            Session::forget('cart');
-            Session::put('cart', $userCart);
+            Cookie::unqueue('cart');
+            Cookie::queue('cart', json_encode($userCart), 864000);
         }
         return redirect()->back();
     }

@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\OrderBook;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
@@ -31,22 +32,22 @@ class OrderController extends Controller
     {
         if (Session::get('cart')) {
             $total = $request->input('total');
-            $cart = Session::get('cart');
+            $cart = json_decode(Cookie::get('cart'), true);
             $user = auth('web')->user();
             $order = new Order;
             $order->fill(['user_id' => $user->id, 'sum' => $total]);
             $order->save();
             $order_id = $order->id;
-            foreach ($cart as $crt) {
+            foreach ($cart as $book_id => $qty) {
                 $orderBook = new OrderBook;
-                $orderBook->fill(['order_id' => $order_id, 'book_id' => $crt[0], 'qty' => $crt[1]]);
+                $orderBook->fill(['order_id' => $order_id, 'book_id' => $book_id, 'qty' => $qty]);
                 if ($orderBook->save()) {
-                    $book = Book::find($crt[0]);
-                    $book->qty -= $crt[1];
+                    $book = Book::find($book_id);
+                    $book->qty -= $qty;
                     $book->save();
                 }
             }
-            Session::forget('cart');
+            Cookie::queue(Cookie::forget('cart'));
             return redirect()->back()->with('orderedMessage', 'Պատվերն ընդունված է և պատրաստվում է առաքման շնորհակալություն գնումների համար');
         }
     }
