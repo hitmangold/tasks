@@ -17,7 +17,7 @@
                     <input type="text" value="{{ $author->name }}" name="name" class="form-control" placeholder="Հեղինակի անունը">
                 </div>
                 <div class="col-md-6">
-                    <input type="text" readonly value="{{ $author->surname }}" name="surname" class="form-control" placeholder="Հեղինակի ազգանունը">
+                    <input type="text" value="{{ $author->surname }}" name="surname" class="form-control" placeholder="Հեղինակի ազգանունը">
                 </div>
                 <div class="col-md-6" style="margin-top: 15px;">
                     <select class="js-example-basic-multiple" name="books[]" multiple="multiple" style="height: 40px; width: 100%;">

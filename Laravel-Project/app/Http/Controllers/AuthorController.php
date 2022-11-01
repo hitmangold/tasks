@@ -86,6 +86,9 @@ class AuthorController extends Controller
     public function update(Request $request, $id)
     {
         $author = Author::with('booksAuthors')->find($id);
+        $user_id = $author->id;
+        $user = User::find($user_id);
+        $user->fill(['name' => $request->input('name'), 'surname' => $request->input('surname')]);
         $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname')]);
         $this->validate($request, [
             'name' => 'required|min:3',
@@ -107,11 +110,12 @@ class AuthorController extends Controller
         if (!empty($deletedRepeatTwo)) {
             foreach ($deletedRepeatTwo as $book) {
                 $bookAuthor = new BookAuthor;
-                $bookAuthor->fill(array('author_id' => $id, 'book_id' => $book));
+                $bookAuthor->fill(['author_id' => $id, 'book_id' => $book]);
                 $bookAuthor->save();
             }
         }
         $author->save();
+        $user->save();
         return redirect()->route('authors.index');
     }
 
