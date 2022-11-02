@@ -24,7 +24,7 @@
                     @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER) <li @if(request()->is('books/create')) class="active" @endif><a href="{{ route('books.create') }}">Ստեղծել գիրք</a></li> @endif
                     @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <li @if(request()->is('authors/create')) class="active" @endif><a href="{{ route('authors.create') }}">Ստեղծել հաշիվ</a></li> @endif
                     <li style="margin-left: 20px;"><img src="{{ URL::asset('images') }}/user.png" width="30px"></li>
-                    <li><a href="">{{ auth('web')->user()->name }} {{ substr(auth('web')->user()->surname,0,1) }}.</a></li>
+                    <li><a href="">{{ auth('web')->user()->name }} {{ substr(auth('web')->user()->surname,0,1) }}.</a>@if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER) <p style="position:absolute; font-size: 13px; margin-top: -4px; margin-left: 5px; font-weight: 500;">Balance: {{ auth('web')->user()->balance }}դր</p> @endif</li>
                     <li><a href="{{ route('logout') }}"><img src="{{ URL::asset('images') }}/exit.png" width="18px"></a></li>
                 </ul>
             </div>
@@ -35,7 +35,7 @@
             @yield('content')
         </div>
     </div>
-    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && \Illuminate\Support\Facades\Cookie::get('cart'))
+    @if(auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER && \Illuminate\Support\Facades\Cookie::get('cart') && !request()->is('orders'))
     <div class="cart_menu">
         <img src="{{ URL::asset('images') }}/cart.png" width="32px" style="margin-top: 7px; margin-left: 9px; cursor:pointer;">
     </div>
@@ -79,7 +79,17 @@
         margin-top: 15px;">Պատվիրել</button>
             </form>
         </div>
-        </div>
+        @if(session()->has('cartMessage'))
+            <div style="padding-right: 5px; padding-left: 5px;">
+                <p style="color:red; font-weight: 500; font-size: 15px;">{{ session()->get('cartMessage') }}</p>
+            </div>
+            <script>
+                $(document).ready(function(){
+                    $(".cart").animate({width: 'toggle'});
+                });
+            </script>
+        @endif
+        <p></p>
     </div>
     @endif
     @if(session()->has('orderedMessage'))

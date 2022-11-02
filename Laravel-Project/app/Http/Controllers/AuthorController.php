@@ -86,8 +86,7 @@ class AuthorController extends Controller
     public function update(Request $request, $id)
     {
         $author = Author::with('booksAuthors')->find($id);
-        $user_id = $author->id;
-        $user = User::find($user_id);
+        $user = $author->user;
         $user->fill(['name' => $request->input('name'), 'surname' => $request->input('surname')]);
         $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname')]);
         $this->validate($request, [
