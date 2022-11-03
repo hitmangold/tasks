@@ -2,15 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Author;
-use App\Models\Book;
+use App\Http\Requests\StoreBookRequest;
+use App\Http\Requests\UpdateBookRequest;
 use App\Models\User;
-use App\Models\BookAuthor;
-use Illuminate\Database\Eloquent\Model;
+use App\Services\BookService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 
 class BookController extends Controller
 {
@@ -19,37 +15,9 @@ class BookController extends Controller
         $this->middleware('book', ['only' => ['show', 'edit', 'destroy', 'update']]);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, BookService $bookService)
     {
-        $user = auth('web')->user();
-        if ($user->role == User::ROLE_AUTHOR) {
-            $author = $user->author;
-            $query = $author->books();
-        } elseif ($user->role == User::ROLE_ADMIN || $user->role == User::ROLE_CUSTOMER) {
-            $query = Book::with('authors');
-        }
-        /* $query = Author::with('books')->find($author_id)->books();*/
-        if ($request->input('search_title')) {
-            $query = $query->where('title', 'like', '%' . $request->input('search_title') . '%');
-        }
-        $books = $query->paginate(3);
-        $view = view('book.index', compact('books'))->with('count', $books->count());
-        if ($user->role == User::ROLE_CUSTOMER && Cookie::get('cart')) {
-            $cart = json_decode(Cookie::get('cart'), true);
-            $cartData = array(
-                'ids' => [],
-                'qty' => []
-            );
-            foreach ($cart as $book_id => $qty) {
-                array_push($cartData['ids'], $book_id);
-                array_push($cartData['qty'], $qty);
-            }
-            $cartBooks = array(
-                'books' => Book::find($cartData['ids']),
-                'qty' => $cartData['qty']
-            );
-            $view = $view->with('cart', $cartBooks);
-        }
+        $view = $bookService->index($request->input('search_title'));
         return $view;
     }
 
@@ -59,94 +27,37 @@ class BookController extends Controller
         return view('book.create', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(StoreBookRequest $request, BookService $bookService)
     {
-        $user = auth('web')->user();
-        $book = new Book;
-        $book->fill(['title' => $request->input('title'), 'price' => $request->input('price'), 'qty' => $request->input('qty')]);
-        $validBook = [
-            'title' => 'required|min:8',
-            'price' => 'required|numeric',
-            'qty' => 'required|numeric|not_in:0',
-        ];
-        if ($user->role == User::ROLE_ADMIN) {
-            $validBook['authors'] = "required";
-        }
-        $this->validate($request, $validBook);
-        $book->save();
-        $book_id = $book->id;
-        if ($user->role == User::ROLE_AUTHOR) {
-            $bookAuthor = new BookAuthor;
-            $bookAuthor->fill(['author_id' => $user->author->id, 'book_id' => $book_id]);
-            $bookAuthor->save();
-        } else {
-            foreach ($request->input('authors') as $author) {
-                $bookAuthor = new BookAuthor;
-                $bookAuthor->fill(['author_id' => $author, 'book_id' => $book_id]);
-                $bookAuthor->save();
-            }
-        }
+        $bookService->addBook($request->title,
+            $request->price,
+            $request->qty,
+            $request->authors
+        );
         return redirect()->route('books.create')->with('message', 'Գիրքը հաջողությամբ ստեղծվել է');
     }
 
-    public function show($id)
+    public function show(BookService $bookService, $id)
     {
-        $book = Book::with('authors')->find($id);
-        $authors = Author::all();
-        return view('book.show', compact('authors', 'book'))->with('show', 1);
+        $data = $bookService->show($id);
+        return view('book.show', compact('data'))->with('show', 1);
     }
 
-    public function edit($id)
+    public function edit(BookService $bookService, $id)
     {
-        $book = Book::with('authors')->find($id);
-        $query = User::where('role', User::ROLE_AUTHOR);
-        $authors = $query->with('author')->get();
-        return view('book.edit', compact('authors', 'book'));
+        $data = $bookService->edit($id);
+        return view('book.edit', compact('data'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBookRequest $request, BookService $bookService, $id)
     {
-        $user = auth('web')->user();
-        $book = Book::with('booksAuthors')->find($id);
-        $book->title = $request->input('title');
-        $book->price = $request->input('price');
-        $validBook = [
-            'title' => 'required|min:8',
-            'price' => 'required|numeric',
-        ];
-        if ($user->role == User::ROLE_ADMIN) {
-            $validBook['authors'] = 'required';
-        }
-        $this->validate($request, $validBook);
-        if ($user->role == User::ROLE_ADMIN) {
-            $authors = $request->input('authors');
-            $booksAuthorsId = [];
-            foreach ($book->booksAuthors as $author_books) {
-                array_push($booksAuthorsId, $author_books->author_id);
-            }
-            $deletedRepeatOne = array_diff($booksAuthorsId, $authors);
-            $deletedRepeatTwo = array_diff($authors, $booksAuthorsId);
-            if (!empty($deletedRepeatOne)) {
-                BookAuthor::where('book_id', $id)->whereIn('author_id', $deletedRepeatOne)->delete();
-            }
-            if (!empty($deletedRepeatTwo)) {
-                foreach ($deletedRepeatTwo as $author) {
-                    $bookAuthor = new BookAuthor;
-                    $bookAuthor->fill(array('author_id' => $author, 'book_id' => $id));
-                    $bookAuthor->save();
-                }
-            }
-        }
-        $book->save();
+        $bookService->update($request->title, $request->price, $request->authors, $id);
         return redirect()->route('books.index');
     }
 
-    public function destroy($id)
+    public function destroy(BookService $bookService, $id)
     {
-        $book = Book::find($id);
-        if ($book) {
-            $book->delete();
-        }
+        $bookService->delete($id);
         return back();
     }
 }

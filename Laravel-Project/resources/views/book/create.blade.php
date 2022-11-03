@@ -21,9 +21,10 @@
                 <div class="col-md-6" style="margin-top: 15px;">
                     <input type="text" name="qty" class="form-control" placeholder="Գրքի քանակը">
                 </div>
-                @if(auth('web')->user()->role == 2)
+                @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN)
                 <div class="col-md-6" style="margin-top: 15px;">
-                    <select class="js-example-basic-multiple" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;" >
+                    <input type="hidden" class="authors_hidden" name="authors">
+                    <select class="js-example-basic-multiple select_authors" name="authors[]" multiple="multiple" style="height: 40px; width: 100%;" >
                         @foreach($users as $user)
                             <option value="{{ $user->author->id }}">{{ $user->author->name }} {{ $user->author->surname }}</option>
                         @endforeach
@@ -47,6 +48,14 @@
     <script>
         $(document).ready(function(){
             $('.js-example-basic-multiple').select2();
+            $(".select_authors").change(function () {
+                if($(this).val() == null) {
+                    $(".authors_hidden").css("display","block");
+                }
+                else {
+                    $(".authors_hidden").css("display","none");
+                }
+            });
         });
     </script>
 @endsection

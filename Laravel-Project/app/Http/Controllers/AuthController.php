@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\Author;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -18,48 +21,15 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function regProccess(Request $request)
+    public function regProccess(RegisterRequest $request, AuthService $authService)
     {
-        $this->validate($request, [
-            'name' => 'required|min:3',
-            'surname' => 'required|min:3',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6|confirmed',
-        ]);
-
-        $userCreate = [
-            'name' => $request->input('name'),
-            'surname' => $request->input('surname'),
-            'email' => $request->input('email'),
-            'password' => app('hash')->make($request->input('password'))
-        ];
-
-        if ($request->input('role') == 'customer') {
-            $userCreate['role'] = User::ROLE_CUSTOMER;
-        } elseif ($request->input('role') == 'author') {
-            $userCreate['role'] = User::ROLE_AUTHOR;
-        }
-
-        $user = User::create($userCreate);
-
-        if ($user) {
-            $author = new Author;
-            $author->fill(['name' => $request->input('name'), 'surname' => $request->input('surname'), 'user_id' => $user->id]);
-            $author->save();
-            auth("web")->login($user);
-        }
-
+        $authService->register($request->name, $request->surname, $request->email, $request->password, $request->role);
         return redirect(route('books.index'));
     }
 
-    public function authProccess(Request $request)
+    public function authProccess(AuthRequest $request, AuthService $authService)
     {
-        $data = $this->validate($request, [
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-        ]);
-
-        if (auth("web")->attempt($data)) {
+        if ($authService->login($request->email, $request->password)) {
             return redirect(route('books.index'));
         }
         return redirect(route('login'))->withErrors(['email' => 'User not found or data entered incorrectly']);
