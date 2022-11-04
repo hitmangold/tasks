@@ -27,7 +27,7 @@ class BookService
         }
         return $cartBooks;
     }
-    public function index(?string $searchTitle)
+    public function getPaginatedBooks(?string $searchTitle)
     {
         $user = auth('web')->user();
         if ($user->role == User::ROLE_AUTHOR) {

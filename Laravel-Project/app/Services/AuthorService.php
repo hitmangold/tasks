@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AuthorService
 {
-    public function index(?string $search_name, ?string $search_surname)
+    public function getPaginatedAuthors(?string $search_name, ?string $search_surname)
     {
         $query = Author::with('Books');
         if ($search_name) {

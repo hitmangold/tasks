@@ -18,7 +18,7 @@ class AuthorController extends Controller
 {
     public function index(Request $request, AuthorService $authorService)
     {
-        $authors = $authorService->index($request->input('search_name'), $request->input('search_surname'));
+        $authors = $authorService->getPaginatedAuthors($request->input('search_name'), $request->input('search_surname'));
         return view('author.index', compact('authors'));
     }
 

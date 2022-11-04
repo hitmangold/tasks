@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Cookie;
 
 class OrderService
 {
-    public function index()
+    public function getOrders()
     {
         $user = auth('web')->user();
         if ($user->role == User::ROLE_CUSTOMER) {

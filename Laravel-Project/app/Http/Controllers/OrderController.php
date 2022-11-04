@@ -18,7 +18,7 @@ class OrderController extends Controller
 {
     public function index(OrderService $orderService)
     {
-        return view('order.index', $orderService->index());
+        return view('order.index', $orderService->getOrders());
     }
 
     public function create(Request $request, OrderService $orderService)

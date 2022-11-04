@@ -17,7 +17,7 @@ class BookController extends Controller
 
     public function index(Request $request, BookService $bookService)
     {
-        $view = $bookService->index($request->input('search_title'));
+        $view = $bookService->getPaginatedBooks($request->input('search_title'));
         return $view;
     }
 
