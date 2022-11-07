@@ -49,6 +49,9 @@ class BookService
     public function addBook(string $title, float $price, int $qty, ?array $authors)
     {
         $user = auth('web')->user();
+        if (!$user) {
+            $user = auth('sanctum')->user();
+        }
         $book = new Book;
         $book->fill(['title' => $title, 'price' => $price, 'qty' => $qty]);
         $book->save();

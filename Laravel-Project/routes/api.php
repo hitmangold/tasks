@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\BookController;
 use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AuthController;
@@ -16,12 +18,16 @@ use App\Http\Controllers\API\AuthController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('user/info', [UserController::class, 'info']);
+    Route::get('books', [BookController::class, 'index']);
+    Route::get('orders', [OrderController::class, 'index']);
+    Route::post('books/delete', [BookController::class, 'destroy'])->middleware('api.bookDelete');
+    Route::post('books/create', [BookController::class, 'create'])->middleware('api.bookCreate');
 });
 
 Route::post('register', [AuthController::class, 'regProccess']);

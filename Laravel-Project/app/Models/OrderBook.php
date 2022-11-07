@@ -15,4 +15,8 @@ class OrderBook extends Model
     {
         return $this->hasMany(Book::class);
     }
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'id', 'order_id');
+    }
 }

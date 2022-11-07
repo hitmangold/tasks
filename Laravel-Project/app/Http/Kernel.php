@@ -65,5 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckRole::class,
         'book' => \App\Http\Middleware\CheckBook::class,
+        'api.bookCreate' => \App\Http\Middleware\API\CreateBookRole::class,
+        'api.bookDelete' => \App\Http\Middleware\API\DeleteBookRole::class,
     ];
 }
