@@ -45,7 +45,7 @@ class RegisterRequest extends FormRequest
 
             'data'      => $validator->errors()
 
-        ], 401));
+        ], 400));
 
     }
 }

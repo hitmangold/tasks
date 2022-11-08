@@ -24,10 +24,10 @@ use App\Http\Controllers\API\AuthController;
 
 Route::middleware('auth:sanctum')->group(function(){
     Route::get('user/info', [UserController::class, 'info']);
-    Route::get('books', [BookController::class, 'index']);
+    Route::get('books', [BookController::class, 'index'])->name('api.getBooks');
     Route::get('orders', [OrderController::class, 'index']);
-    Route::post('books/delete', [BookController::class, 'destroy'])->middleware('api.bookDelete');
-    Route::post('books/create', [BookController::class, 'create'])->middleware('api.bookCreate');
+    Route::post('books/delete', [BookController::class, 'destroy'])->name('api.deleteBook')->middleware('api.bookDelete');
+    Route::post('books/create', [BookController::class, 'create'])->name('api.createBook')->middleware('api.bookCreate');
 });
 
 Route::post('register', [AuthController::class, 'regProccess']);

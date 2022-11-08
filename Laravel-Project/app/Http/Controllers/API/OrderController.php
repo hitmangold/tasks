@@ -22,18 +22,4 @@ class OrderController extends Controller
             ], 500);
         }
     }
-    public function create(OrderService $orderService)
-    {
-        try {
-
-
-            return $orders;
-
-        } catch (\Throwable $th) {
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ], 500);
-        }
-    }
 }

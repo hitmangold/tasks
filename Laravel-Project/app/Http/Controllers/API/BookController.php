@@ -26,14 +26,15 @@ class BookController extends Controller
     public function create(\App\Services\BookService $bookService, StoreBookRequest $request)
     {
         try {
-            $bookService->addBook($request->title,
+            $id = $bookService->addBook($request->title,
                 $request->price,
                 $request->qty,
                 $request->authors
             );
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Book created successfully',
+                'id' => $id,
             ], 200);
 
         } catch (\Throwable $th) {
@@ -48,7 +49,7 @@ class BookController extends Controller
         try {
             $bookService->delete($request->id);
             return response()->json([
-                'status' => false,
+                'status' => true,
                 'message' => 'Book deleted successfully',
             ], 200);
 

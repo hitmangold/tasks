@@ -64,6 +64,7 @@ class BookService
             $bookAuthor->fill(['author_id' => $author, 'book_id' => $book_id]);
             $bookAuthor->save();
         }
+        return $book_id;
     }
     public function update(string $title, float $price, ?array $authors, int $id)
     {

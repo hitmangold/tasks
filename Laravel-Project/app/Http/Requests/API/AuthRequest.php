@@ -42,7 +42,7 @@ class AuthRequest extends FormRequest
 
             'data'      => $validator->errors()
 
-        ], 401));
+        ], 400));
 
     }
 }

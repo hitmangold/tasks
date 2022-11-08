@@ -25,7 +25,7 @@ class DeleteBookRole
                 return response()->json([
                     'status' => false,
                     'message' => 'Произошла ошибка! книга не найдено!'
-                ], 500);
+                ], 400);
             }
         } elseif ($user->role == User::ROLE_CUSTOMER) {
             return response()->json([
