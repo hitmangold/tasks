@@ -21,7 +21,7 @@
             <div class="modal_content" data-id="{{ $order->id }}" style="display:none;">
                 @foreach($order->orderBook as $book)
                     <div class="col-md-4">
-                        <img src="{{ URL::asset('images') }}/book.jpg" width="120px"><br>
+                        <img src="{{ URL::asset('AdminLTE/images') }}/book.jpg" width="120px"><br>
                         <span>Գրքի համարը: {{ $book->id }}</span><br>
                         <span>Գրքի անունը: {{ $book->title }}</span><br>
                         <span>Գրքի գինը: {{ $book->price }}</span><br>

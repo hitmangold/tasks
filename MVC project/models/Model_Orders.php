@@ -6,7 +6,7 @@ class Model_Main
     {
         $instance = Database::getinstance();
         $conn = $instance->getconnection();
-        $all_orders = new Query($conn, 'orders');
+        $all_orders = new Query($conn, 'order');
         $get_orders_query = $all_orders->select();
         return $get_orders_query;
     }

@@ -52,8 +52,8 @@
                         @csrf
                         <input type="text" value="1" class="qty_product" data-id="{{ $book->id }}" name="qty" style="width: 40px; border: 1px solid gray; height: 35px; border-radius: 8px;">
                         <input type="hidden" value="{{ $book->id }}" name="book_id">
-                        <img src="{{ URL::asset('images/plus.png') }}" class="add_value" data-id="{{ $book->id }}" data-qty="{{ $book->qty }}" style="width: 16px; cursor:pointer;">
-                        <img src="{{ URL::asset('images/minus.png') }}" class="minus_value" data-id="{{ $book->id }}" style="width: 16px; cursor:pointer;">
+                        <img src="{{ URL::asset('AdminLTE/images/plus.png') }}" class="add_value" data-id="{{ $book->id }}" data-qty="{{ $book->qty }}" style="width: 16px; cursor:pointer;">
+                        <img src="{{ URL::asset('AdminLTE/images/minus.png') }}" class="minus_value" data-id="{{ $book->id }}" style="width: 16px; cursor:pointer;">
                         <button type="submit" class="btn_cart">Ավելացնել զամբյուղում</button>
                     </form>
                 @endif

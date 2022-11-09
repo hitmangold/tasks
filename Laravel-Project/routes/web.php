@@ -33,3 +33,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
     Route::post('/orders/create', [OrderController::class, 'create'])->name('order.create');
 });
+
+Route::get('/admin', function (){
+    return view('AdminLTE.admin');
+});

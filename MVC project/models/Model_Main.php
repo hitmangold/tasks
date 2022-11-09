@@ -34,7 +34,7 @@ class Model_Main
                     $user_id = $conn->lastInsertId();
                     $ord_rows = 'user_id,sum';
                     $insert_order = "'{$user_id}','{$total}'";
-                    $insert_query = new Query($conn, 'orders', $ord_rows, $insert_order);
+                    $insert_query = new Query($conn, 'order', $ord_rows, $insert_order);
                     $insert_query = $insert_query->insert();
                     $order_id = $conn->lastInsertId();
                     $ord_rows_p = 'order_id,product_id,qty';
