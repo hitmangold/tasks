@@ -1,1 +1,0 @@
-@extends('AdminLTE.main')

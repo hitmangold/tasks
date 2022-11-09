@@ -1,66 +1,353 @@
 @extends('layout')
 
 @section('content')
-    @if(auth('web')->user()->role != \App\Models\User::ROLE_AUTHOR)
-    <table style="margin-right: 10px; margin-left: 10px;">
-        <tr>
-            <th>Պատվերի համարը</th>
-            <th>Պատվերի գինը</th>
-            @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <th>Պատվիրատու</th> @endif
-            <th>Պատվերի ամսաթիվը</th>
-            <th>Գործողություն</th>
-        </tr>
-        @foreach($orders as $order)
-            <tr>
-                <td>{{ $order->id }}</td>
-                <td>{{ $order->sum }}</td>
-                @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <td>{{ $order->user->name }} {{ substr($order->user->surname,0,1) }}</td> @endif
-                <td>{{ $order->created_at }}</td>
-                <td><a href="" data-id="{{ $order->id }}" class="show_ordered_list">Տեսնել պատվիրված գրքերը</a></td>
-            </tr>
-            <div class="modal_content" data-id="{{ $order->id }}" style="display:none;">
-                @foreach($order->orderBook as $book)
-                    <div class="col-md-4">
-                        <img src="{{ URL::asset('AdminLTE/images') }}/book.jpg" width="120px"><br>
-                        <span>Գրքի համարը: {{ $book->id }}</span><br>
-                        <span>Գրքի անունը: {{ $book->title }}</span><br>
-                        <span>Գրքի գինը: {{ $book->price }}</span><br>
-                        <span>Քանակը: {{ $book->pivot->qty }}</span><br>
-                    </div>
-                @endforeach
-            </div>
-        @endforeach
-    </table>
-    @else
-        <div class="col-md-12">
-            <h3>Իմ գրքի պատվերները</h3>
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Պատվերներ</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Գլխավոր</a></li>
+                            <li class="breadcrumb-item active">
+                                @if(auth('web')->user()->role == \App\Models\User::ROLE_AUTHOR)
+                                    Իմ գրքի պատվերները
+                                @elseif(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN)
+                                    Բոլոր պատվերները
+                                @else
+                                    Իմ պատվերները
+                                @endif
+                            </li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
         </div>
-        @foreach($books as $book)
-        <div class="col-md-4" style="margin-top: 15px;">
-            <div class="cnr">
-                <img src="images/book.jpg" width="100%">
-                <h4>Վերնագիր: {{ $book->title }}</h4>
-                <p style="margin-bottom: 10px; font-size: 15px; font-weight: 500;">Գինը: {{ $book->price }}դր, @if($book->qty != 0) Քանակը: {{ $book->qty }} @else <span style="color: red;">Առկա չէ</span> @endif</p>
-                @if(!empty($book->orders[0]))
-                    @foreach($book->orders as $order)
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p style="font-weight: 500; margin-bottom: 0px;">Պատվիրատու:</p>
-                                <p style="font-weight: 500; font-size: 15px;">{{ $order->user->name }}</p>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    @if(auth('web')->user()->role != \App\Models\User::ROLE_AUTHOR)
+                        <table style="margin-right: 10px; margin-left: 10px;">
+                            <tr>
+                                <th>Պատվերի համարը</th>
+                                <th>Պատվերի գինը</th>
+                                @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <th>Պատվիրատու</th> @endif
+                                <th>Պատվերի ամսաթիվը</th>
+                                <th>Գործողություն</th>
+                            </tr>
+                            @foreach($orders as $order)
+                                <tr>
+                                    <td>{{ $order->id }}</td>
+                                    <td>{{ $order->sum }}</td>
+                                    @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN) <td>{{ $order->user->name }} {{ substr($order->user->surname,0,1) }}</td> @endif
+                                    <td>{{ $order->created_at }}</td>
+                                    <td><a href="" data-id="{{ $order->id }}" class="show_ordered_list">Տեսնել պատվիրված գրքերը</a></td>
+                                </tr>
+                                <div class="modal_content" data-id="{{ $order->id }}" style="display:none;">
+                                    @foreach($order->orderBook as $book)
+                                        <div class="col-md-4">
+                                            <img src="{{ URL::asset('AdminLTE/images') }}/book.jpg" width="120px"><br>
+                                            <span>Գրքի համարը: {{ $book->id }}</span><br>
+                                            <span>Գրքի անունը: {{ $book->title }}</span><br>
+                                            <span>Գրքի գինը: {{ $book->price }}</span><br>
+                                            <span>Քանակը: {{ $book->pivot->qty }}</span><br>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
+                        </table>
+                    @else
+                        @foreach($books as $book)
+                            <div class="col-md-4" style="margin-top: 15px;">
+                                <div class="cnr">
+                                    <img src="{{ URL::asset('images/book.jpg') }}" width="100%">
+                                    <h4>Վերնագիր: {{ $book->title }}</h4>
+                                    <p style="margin-bottom: 10px; font-size: 15px; font-weight: 500;">Գինը: {{ $book->price }}դր, @if($book->qty != 0) Քանակը: {{ $book->qty }} @else <span style="color: red;">Առկա չէ</span> @endif</p>
+                                    @if(!empty($book->orders[0]))
+                                        @foreach($book->orders as $order)
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <p style="font-weight: 500; margin-bottom: 0px;">Պատվիրատու:</p>
+                                                    <p style="font-weight: 500; font-size: 15px;">{{ $order->user->name }}</p>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p style="font-weight: 500; margin-bottom: 0px">Քանակը:</p>
+                                                    <p style="font-weight: 500; font-size: 15px;">{{ $order->pivot->qty }}</p>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <p>Պատվերներ դեռ չկան</p>
+                                    @endif
+                                </div>
                             </div>
-                            <div class="col-md-6">
-                                <p style="font-weight: 500; margin-bottom: 0px">Քանակը:</p>
-                                <p style="font-weight: 500; font-size: 15px;">{{ $order->pivot->qty }}</p>
+                        @endforeach
+                    @endif
+                </div>
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+@endsection
+
+@section('navbar')
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ route('books.index') }}" class="nav-link">Գլխավոր</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ route('order.index') }}" class="nav-link">Պատվերներ</a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Navbar Search -->
+            <li class="nav-item">
+                <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+                    <i class="fas fa-search"></i>
+                </a>
+                <div class="navbar-search-block">
+                    <form class="form-inline" action="{{ route('books.index') }}" method="GET">
+                        <div class="input-group input-group-sm">
+                            <input class="form-control form-control-navbar" name="search_title" type="search" placeholder="Search" aria-label="Search">
+                            <div class="input-group-append">
+                                <button class="btn btn-navbar" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                                <button class="btn btn-navbar" type="button" data-widget="navbar-search">
+                                    <i class="fas fa-times"></i>
+                                </button>
                             </div>
                         </div>
-                    @endforeach
-                @else
-                    <p>Պատվերներ դեռ չկան</p>
-                @endif
+                    </form>
+                </div>
+            </li>
+
+            <!-- Messages Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-comments"></i>
+                    <span class="badge badge-danger navbar-badge">3</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="{{ URL::asset('dist/img/user1-128x128.jpg') }}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    Brad Diesel
+                                    <span class="float-right text-sm text-danger"><i class="fas fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">Call me whenever you can...</p>
+                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="{{ URL::asset('dist/img/user8-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    John Pierce
+                                    <span class="float-right text-sm text-muted"><i class="fas fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">I got your message bro</p>
+                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <!-- Message Start -->
+                        <div class="media">
+                            <img src="{{ URL::asset('dist/img/user3-128x128.jpg') }}" alt="User Avatar" class="img-size-50 img-circle mr-3">
+                            <div class="media-body">
+                                <h3 class="dropdown-item-title">
+                                    Nora Silvester
+                                    <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
+                                </h3>
+                                <p class="text-sm">The subject goes here</p>
+                                <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+                            </div>
+                        </div>
+                        <!-- Message End -->
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Messages</a>
+                </div>
+            </li>
+            <!-- Notifications Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="far fa-bell"></i>
+                    <span class="badge badge-warning navbar-badge">15</span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                    <span class="dropdown-item dropdown-header">15 Notifications</span>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-envelope mr-2"></i> 4 new messages
+                        <span class="float-right text-muted text-sm">3 mins</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-users mr-2"></i> 8 friend requests
+                        <span class="float-right text-muted text-sm">12 hours</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item">
+                        <i class="fas fa-file mr-2"></i> 3 new reports
+                        <span class="float-right text-muted text-sm">2 days</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-widget="control-sidebar" data-controlsidebar-slide="true" href="#" role="button">
+                    <i class="fas fa-th-large"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+@endsection
+
+@section('sidebar')
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <!-- Brand Logo -->
+        <a href="{{ route('books.index') }}" class="brand-link">
+            <img src="{{ URL::asset('dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">AdminLTE 3</span>
+        </a>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    <img src="{{ URL::asset('dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
+                </div>
+                <div class="info">
+                    <a href="#" class="d-block">{{ auth('web')->user()->name }} {{ auth('web')->user()->surname }}</a>
+                </div>
             </div>
+
+            <!-- SidebarSearch Form -->
+            <div class="form-inline">
+                <div class="input-group" data-widget="sidebar-search">
+                    <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="btn btn-sidebar">
+                            <i class="fas fa-search fa-fw"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
+                    <li class="nav-item menu-open">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>
+                                Գլխավոր
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('books.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>
+                                        @if(auth('web')->user()->role == \App\Models\User::ROLE_AUTHOR)
+                                            Իմ գրքերը
+                                        @elseif(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN || auth('web')->user()->role == \App\Models\User::ROLE_CUSTOMER)
+                                            Բոլոր գրքերը
+                                        @endif
+                                    </p>
+                                </a>
+                            </li>
+                            @if(auth('web')->user()->role != \App\Models\User::ROLE_CUSTOMER)
+                                <li class="nav-item">
+                                    <a href="{{ route('books.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ավելացնել գիրք</p>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                    @if(auth('web')->user()->role == \App\Models\User::ROLE_ADMIN)
+                        <li class="nav-item">
+                            <a href="{{ route('authors.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-table"></i>
+                                <p>
+                                    Բոլոր հաշիվները
+                                </p>
+                            </a>
+                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a href="{{ route('order.index') }}" class="nav-link active">
+                            <i class="nav-icon fas fa-table"></i>
+                            <p>
+                                Պատվերներ
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('logout') }}" class="nav-link">
+                            <i class="nav-icon fas fa-sign-out-alt" aria-hidden="true"></i>
+                            <p>
+                                Ելք
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
         </div>
-        @endforeach
-    @endif
+        <!-- /.sidebar -->
+    </aside>
+@endsection
+
+@section('footer')
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+        All rights reserved.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Version</b> 3.2.0
+        </div>
+    </footer>
     <div class="modal fade bd-example-modal-lg modal_orderbooks" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="padding-top: 20px; padding-bottom: 20px;">
@@ -73,3 +360,4 @@
         </div>
     </div>
 @endsection
+

@@ -59,4 +59,5 @@ $(document).ready(function(){
         $(".modal_oderbooks_body").html(content);
         $(".modal_orderbooks").modal("show");
     });
+    $('.js-example-basic-multiple').select2();
 });
